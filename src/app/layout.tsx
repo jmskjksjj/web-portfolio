@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sunjae Kim",
+  title: "SeonJ",
   description:
     "Full-stack AI engineer. Building architectural design automation systems.",
 };

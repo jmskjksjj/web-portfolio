@@ -2,7 +2,7 @@ import { getProjectsByCategory } from "@/lib/projects";
 import { ProjectList } from "@/components/ProjectList";
 import { CategoryHeader } from "@/components/CategoryHeader";
 
-export const metadata = { title: "Web Projects — Sunjae Kim" };
+export const metadata = { title: "Web Projects — SeonJ" };
 
 export default function WebProjectsPage() {
   const projects = getProjectsByCategory("web");

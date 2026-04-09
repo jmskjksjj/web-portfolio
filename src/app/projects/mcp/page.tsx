@@ -2,7 +2,7 @@ import { getProjectsByCategory } from "@/lib/projects";
 import { ProjectList } from "@/components/ProjectList";
 import { CategoryHeader } from "@/components/CategoryHeader";
 
-export const metadata = { title: "MCP Servers — Sunjae Kim" };
+export const metadata = { title: "MCP Servers — SeonJ" };
 
 export default function McpProjectsPage() {
   const projects = getProjectsByCategory("mcp");

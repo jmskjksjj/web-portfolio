@@ -19,7 +19,7 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
   return params.then(({ slug }) => {
     const project = getProjectBySlug(slug);
     return {
-      title: project ? `${project.name} — Sunjae Kim` : "Project Not Found",
+      title: project ? `${project.name} — SeonJ` : "Project Not Found",
     };
   });
 }

@@ -23,7 +23,7 @@ export function Navbar() {
         href="/"
         className="text-sm font-medium text-text-primary tracking-tight"
       >
-        Sunjae Kim
+        SeonJ
       </Link>
 
       <div className="flex items-center justify-center gap-6 md:gap-8">

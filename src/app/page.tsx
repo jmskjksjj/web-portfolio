@@ -121,7 +121,7 @@ export default function Home() {
       <footer className="border-t border-border">
         <div className="max-w-4xl mx-auto px-6 py-8 flex justify-between items-center">
           <span className="text-xs text-text-muted">
-            &copy; 2026 Sunjae Kim
+            &copy; 2026 SeonJ
           </span>
           <div className="flex gap-6">
             <a href="mailto:jmskjksjj@gmail.com" className="text-xs text-text-secondary hover:text-text-primary transition-colors">
