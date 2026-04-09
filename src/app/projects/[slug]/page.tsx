@@ -35,38 +35,38 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
+    <div className="max-w-4xl mx-auto px-5 md:px-6 py-16 md:py-20">
       {/* Back link */}
       <Link
         href={`/projects/${project.category}`}
-        className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors mb-12"
+        className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors mb-8 md:mb-12"
       >
         <ArrowLeft size={14} />
         {categoryLabels[project.category]}
       </Link>
 
       {/* Header */}
-      <div className="mb-16">
+      <div className="mb-10 md:mb-16">
         <div className="flex items-baseline gap-3 mb-4">
-          <h1 className="text-3xl md:text-4xl font-light tracking-tight">
+          <h1 className="text-2xl md:text-4xl font-light tracking-tight">
             {project.name}
           </h1>
-          <span className="font-mono text-xs text-text-muted px-2 py-0.5 bg-tag-bg border border-border rounded">
+          <span className="font-mono text-[10px] md:text-xs text-text-muted px-2 py-0.5 bg-tag-bg border border-border rounded whitespace-nowrap">
             {project.status}
           </span>
         </div>
 
-        <p className="text-sm font-mono text-text-muted mb-6">
+        <p className="text-[13px] md:text-sm font-mono text-text-muted mb-4 md:mb-6">
           <ProjectType project={project} />
         </p>
 
-        <p className="text-lg text-text-secondary font-light leading-relaxed max-w-2xl">
+        <p className="text-base md:text-lg text-text-secondary font-light leading-relaxed max-w-2xl">
           <ProjectDescription project={project} />
         </p>
       </div>
 
       {/* Hero media or MCP tools */}
-      <div className="mb-16">
+      <div className="mb-10 md:mb-16">
         {project.category === "mcp" && project.tools && project.tools.length > 0 ? (
           <McpToolsSection tools={project.tools} />
         ) : project.video ? (
@@ -105,24 +105,24 @@ export default async function ProjectDetailPage({
       </div>
 
       {/* Detail */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-16 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-10 md:gap-16 mb-10 md:mb-16">
         <div>
-          <h2 className="text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-4">
+          <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-3 md:mb-4">
             <T k="detail.overview" />
           </h2>
-          <p className="text-[15px] text-text-secondary font-light leading-[1.8]">
+          <p className="text-[15px] md:text-[15px] text-text-secondary font-light leading-[1.85]">
             <ProjectDetailText project={project} />
           </p>
         </div>
 
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6 md:gap-8">
           {/* Metrics */}
           {project.metrics && project.metrics.length > 0 && (
             <div>
-              <h3 className="text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-4">
+              <h3 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-3 md:mb-4">
                 <T k="detail.metrics" />
               </h3>
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 md:flex md:flex-col gap-3">
                 {project.metrics.map((m) => (
                   <div key={m.label} className="flex justify-between items-baseline">
                     <span className="text-xs text-text-muted">{m.label}</span>
@@ -137,7 +137,7 @@ export default async function ProjectDetailPage({
 
           {/* Tech Stack */}
           <div>
-            <h3 className="text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-4">
+            <h3 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-3 md:mb-4">
               <T k="detail.stack" />
             </h3>
             <div className="flex flex-wrap gap-1.5">
@@ -158,7 +158,7 @@ export default async function ProjectDetailPage({
       {(() => {
         const extraImages = project.video ? project.images : project.images?.slice(1);
         return extraImages && extraImages.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-10 md:mb-16">
             {extraImages.map((img, idx) => (
               <div key={idx} className="relative aspect-[16/9] rounded-lg overflow-hidden border border-border">
                 <Image

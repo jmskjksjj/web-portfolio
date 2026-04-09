@@ -1,21 +1,34 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { NebulaScene, type HeroLine } from "@/components/NebulaScene";
 import { useLang } from "@/components/LangProvider";
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function Home() {
   const { t, lang } = useLang();
+  const m = useIsMobile();
 
   const heroLines: HeroLine[] = [
-    { text: "AI SYSTEMS ARCHITECT", y: 2.6, size: 0.15, opacity: 0.6, letterSpacing: 0.12 },
-    { text: "Design and Build", y: 1.5, size: 0.65, bold: true },
-    { text: "Entire Ecosystems", y: 0.6, size: 0.65, bold: true },
-    { text: t("hero.desc.1"), y: -0.5, size: 0.20, opacity: 0.6 },
-    { text: t("hero.desc.1b"), y: -0.9, size: 0.20, opacity: 0.6 },
-    { text: "End-to-end automation for industries that need them", y: -1.4, size: 0.15, opacity: 0.6, letterSpacing: 0.12 },
-    { text: "All solo", y: -1.8, size: 0.15, opacity: 0.6, letterSpacing: 0.12 },
+    { text: "AI SYSTEMS ARCHITECT", y: m ? 2.2 : 2.6, size: m ? 0.11 : 0.15, opacity: 0.6, letterSpacing: 0.12 },
+    { text: "Design and Build", y: m ? 1.3 : 1.5, size: m ? 0.42 : 0.65, bold: true },
+    { text: "Entire Ecosystems", y: m ? 0.55 : 0.6, size: m ? 0.42 : 0.65, bold: true },
+    { text: t("hero.desc.1"), y: m ? -0.3 : -0.5, size: m ? 0.14 : 0.20, opacity: 0.6 },
+    { text: t("hero.desc.1b"), y: m ? -0.65 : -0.9, size: m ? 0.14 : 0.20, opacity: 0.6 },
+    { text: "End-to-end automation for industries that need them", y: m ? -1.05 : -1.4, size: m ? 0.09 : 0.15, opacity: 0.6, letterSpacing: 0.12 },
+    { text: "All solo", y: m ? -1.3 : -1.8, size: m ? 0.09 : 0.15, opacity: 0.6, letterSpacing: 0.12 },
   ];
 
   return (
@@ -46,7 +59,7 @@ export default function Home() {
 
       {/* Stats strip */}
       <section className="border-y border-border">
-        <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-4xl mx-auto px-6 py-6 md:py-8 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {[
             { value: "6", label: t("stats.mcp") },
             { value: "9", label: t("stats.phases") },
@@ -66,7 +79,7 @@ export default function Home() {
       </section>
 
       {/* Quick links */}
-      <section className="max-w-4xl mx-auto px-6 py-20">
+      <section className="max-w-4xl mx-auto px-5 md:px-6 py-12 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border">
           {[
             {
@@ -97,7 +110,7 @@ export default function Home() {
             <Link
               key={item.href}
               href={item.href}
-              className="group bg-bg p-8 hover:bg-hover-bg transition-colors"
+              className="group bg-bg p-6 md:p-8 hover:bg-hover-bg transition-colors"
             >
               <div className="flex items-baseline justify-between mb-3">
                 <h3 className="text-lg font-medium">{item.title}</h3>
@@ -119,7 +132,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border">
-        <div className="max-w-4xl mx-auto px-6 py-8 flex justify-between items-center">
+        <div className="max-w-4xl mx-auto px-5 md:px-6 py-6 md:py-8 flex justify-between items-center">
           <span className="text-xs text-text-muted">
             &copy; 2026 SeonJ
           </span>

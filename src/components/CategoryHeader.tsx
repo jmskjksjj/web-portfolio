@@ -26,12 +26,12 @@ export function CategoryHeader({
     : `${count} ${unit}`;
 
   return (
-    <div className="flex justify-between items-baseline mb-10 pb-4 border-b border-border">
+    <div className="flex justify-between items-baseline mb-8 md:mb-10 pb-4 border-b border-border">
       <div>
-        <h1 className="text-[13px] uppercase tracking-[0.08em] text-text-muted font-medium">
+        <h1 className="text-sm md:text-[13px] uppercase tracking-[0.08em] text-text-muted font-medium">
           {category.toUpperCase()}
         </h1>
-        <p className="text-sm text-text-secondary mt-1 font-light">{desc}</p>
+        <p className="text-[14px] md:text-sm text-text-secondary mt-1.5 font-light">{desc}</p>
       </div>
       <span className="font-mono text-xs text-text-muted">{unitText}</span>
     </div>
