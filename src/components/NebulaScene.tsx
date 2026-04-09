@@ -49,7 +49,7 @@ function Nebula({ count = 5000, isDark = true }) {
     const sizes = new Float32Array(count);
     const isBright = new Uint8Array(count);
     const brightOrder: number[] = [];
-    const brightColors: THREE.Color[] = [];
+    const brightColors: number[] = [];
     const brightSizes: number[] = [];
 
     const brightIndices = new Set<number>();
@@ -259,7 +259,14 @@ function Nebula({ count = 5000, isDark = true }) {
 }
 
 function ShootingStar({ isDark = true }) {
-  const lineRef = useRef<THREE.Line>(null);
+  const lineRef = useRef<THREE.Line | null>(null);
+  const lineObj = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(80 * 3), 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(new Float32Array(80 * 3), 3));
+    const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.7, depthWrite: false, toneMapped: false });
+    return new THREE.Line(geo, mat);
+  }, []);
   const TRAIL_LEN = 80;
 
   const buffers = useMemo(() => {
@@ -377,16 +384,11 @@ function ShootingStar({ isDark = true }) {
     geo.attributes.color.needsUpdate = true;
   });
 
-  return (
-    <line ref={lineRef as React.Ref<THREE.Line>} visible={false}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[new Float32Array(TRAIL_LEN * 3), 3]} />
-        <bufferAttribute attach="attributes-color" args={[new Float32Array(TRAIL_LEN * 3), 3]} />
-      </bufferGeometry>
-      {/* @ts-expect-error - three.js line material */}
-      <lineBasicMaterial vertexColors transparent opacity={0.7} depthWrite={false} toneMapped={false} />
-    </line>
-  );
+  useEffect(() => {
+    lineRef.current = lineObj;
+  }, [lineObj]);
+
+  return <primitive object={lineObj} />;
 }
 
 function PageMouseTracker() {
