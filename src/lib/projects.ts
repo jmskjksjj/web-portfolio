@@ -199,37 +199,52 @@ export const projects: Project[] = [
     slug: "hub-app",
     name: "hub-app",
     category: "app",
-    type: "Desktop App · Electron",
-    typeKo: "데스크톱 앱 · Electron",
+    type: "Desktop App · Electron + Next.js",
+    typeKo: "데스크톱 앱 · Electron + Next.js",
     description:
-      "Electron desktop wrapper for arch-hub. Native Windows app with NSIS installer, bundling the full Next.js frontend.",
+      "Native desktop client for the TAI ecosystem. 7 integrated modules — Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning — with embedded 3D law visualization and real-time pipeline monitoring.",
     descriptionKo:
-      "arch-hub의 Electron 데스크톱 래퍼. NSIS 설치 프로그램을 포함한 네이티브 Windows 앱으로 Next.js 프론트엔드 번들링.",
+      "TAI 에코시스템 네이티브 데스크톱 클라이언트. Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning 7개 통합 모듈과 3D 법규 시각화 내장 및 실시간 파이프라인 모니터링.",
     detail:
-      "Packages the arch-hub web application as a native desktop experience. Built with Electron 34, it provides native window management, system tray integration, and automatic updates. The NSIS installer handles clean installation and uninstallation on Windows.",
+      "More than a wrapper — hub-app is the unified desktop interface for the entire TAI ecosystem. Built with Electron 34, it integrates 7 specialized modules into a single native application. The Workspace module manages competition projects and orchestrates the 9-phase AI pipeline. Phase Detail tracks each stage's progress in real time. The Law Check module embeds the full 3D solar-system law visualization (arch-law-galaxy) directly inside the app, enabling legal research without switching windows. Site Model, Analysis, and Zoning modules provide spatial and regulatory tools for architectural design. The NSIS installer handles deployment on Windows.",
     detailKo:
-      "arch-hub 웹 애플리케이션을 네이티브 데스크톱 경험으로 패키징. Electron 34로 구축하여 네이티브 창 관리, 시스템 트레이 통합, 자동 업데이트를 제공합니다. NSIS 설치 프로그램이 Windows에서 설치/제거를 처리.",
-    techStack: ["Electron 34", "TypeScript", "Next.js", "NSIS"],
+      "단순 래퍼가 아닌, TAI 에코시스템 전체를 하나로 통합한 데스크톱 인터페이스. Electron 34 기반으로 7개 전문 모듈을 단일 네이티브 앱에 통합합니다. Workspace 모듈에서 설계공모 프로젝트를 관리하고 9단계 AI 파이프라인을 실행합니다. Phase Detail에서 각 단계 진행을 실시간 추적합니다. Law Check 모듈은 3D 태양계 법규 시각화(arch-law-galaxy)를 앱 내부에 직접 내장하여 창 전환 없이 법규 조사가 가능합니다. Site Model, Analysis, Zoning 모듈이 건축 설계를 위한 공간·규제 도구를 제공합니다.",
+    techStack: ["Electron 34", "TypeScript", "Next.js", "Three.js", "NSIS"],
+    metrics: [
+      { label: "Integrated Modules", value: "7", labelKo: "통합 모듈" },
+      { label: "Pipeline Phases", value: "9", labelKo: "파이프라인 단계" },
+    ],
     status: "production",
+    video: "/projects/hub-app/video.mp4",
     images: [
       "/projects/hub-app/screenshot-1.png",
+      "/projects/hub-app/screenshot-2.png",
     ],
   },
   {
     slug: "tomoonguidebot",
     name: "tomoonguidebot",
     category: "app",
-    type: "PWA",
+    type: "AI Guide Bot · PWA",
+    typeKo: "AI 업무가이드 봇 · PWA",
     description:
-      "Internal company guide. Task workflows and contact directory as an installable progressive web app.",
+      "AI-powered internal company guide bot for Tomoon Architects. 6 department workflow categories with AI chatbot assistance, interactive form filling, and real-time task guidance.",
     descriptionKo:
-      "사내 업무 가이드. 업무 워크플로우와 연락처를 설치형 프로그레시브 웹 앱으로 제공.",
+      "토문건축 AI 업무가이드 봇. 6개 부서별 워크플로우 카테고리와 AI 챗봇 어시스턴트, 인터랙티브 서식 작성, 실시간 업무 안내.",
     detail:
-      "A lightweight PWA built with vanilla JavaScript and Service Workers. Provides offline-capable task workflow guides and a searchable company phone directory. Designed for quick access on mobile devices without app store distribution.",
+      "An AI-integrated internal guide bot that streamlines company workflows at Tomoon Architects. The main interface presents 6 department categories — IT Support, Building Permits, Overseas Projects, HR & Benefits, Project Management, and Corporate Strategy — each containing step-by-step workflow guides. An AI chatbot assistant on the right panel provides real-time guidance, answering questions and walking users through complex processes like project registration forms. The left sidebar organizes content by teams (Business Management, HR, Education, etc.) with a suggestion box for employee feedback. Built as an installable PWA for offline access on any device.",
     detailKo:
-      "바닐라 JavaScript와 Service Worker로 구축한 경량 PWA. 오프라인 지원 업무 워크플로우 가이드와 검색 가능한 사내 전화번호부를 제공합니다. 앱스토어 배포 없이 모바일에서 빠르게 접근 가능하도록 설계.",
-    techStack: ["Vanilla JS", "Service Worker", "PWA"],
+      "토문건축의 사내 업무를 효율화하는 AI 통합 업무가이드 봇. 메인 화면에 IT지원, 건축허가, 해외/공수, 인사/복지관리, 프로젝트관리, 사내전략/경영관리 6개 부서 카테고리를 제공하며, 각 카테고리에 단계별 워크플로우 가이드가 포함되어 있습니다. 오른쪽 패널의 AI 챗봇 어시스턴트가 실시간으로 업무 안내를 제공하고, 프로젝트 등록신청서 등 복잡한 서식 작성을 단계별로 안내합니다. 좌측 사이드바에서 팀별(사업관리팀, 인사팀, 교육 등) 콘텐츠를 정리하고 건의함을 통해 직원 피드백을 수집합니다. 오프라인 접근을 위한 설치형 PWA.",
+    techStack: ["Vanilla JS", "Service Worker", "PWA", "Claude API"],
+    metrics: [
+      { label: "Workflow Categories", value: "6", labelKo: "워크플로우 카테고리" },
+    ],
     status: "production",
+    video: "/projects/tomoonguidebot/video.mp4",
+    images: [
+      "/projects/tomoonguidebot/screenshot-1.png",
+      "/projects/tomoonguidebot/screenshot-2.png",
+    ],
   },
 
   // ── MCP ──

@@ -12,6 +12,7 @@ const links = [
   { href: "/projects/app", label: "App" },
   { href: "/projects/mcp", label: "MCP" },
   { href: "/projects/other", label: "Other" },
+  { href: "/about", label: "Me" },
 ];
 
 export function Navbar() {
