@@ -70,23 +70,23 @@ export default async function ProjectDetailPage({
         {project.category === "mcp" && project.tools && project.tools.length > 0 ? (
           <McpToolsSection tools={project.tools} />
         ) : project.video ? (
-          <div className="rounded-lg overflow-hidden border border-border" style={{ aspectRatio: "16 / 9" }}>
+          <div className="rounded-lg overflow-hidden border border-border bg-black" style={{ aspectRatio: "16 / 9" }}>
             <video
               src={project.video}
               autoPlay
               loop
               muted
               playsInline
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
         ) : project.images && project.images.length > 0 ? (
-          <div className="relative aspect-video rounded-lg overflow-hidden border border-border">
+          <div className="relative aspect-video rounded-lg overflow-hidden border border-border bg-black">
             <Image
               src={project.images[0]}
               alt={`${project.name} screenshot`}
               fill
-              className="object-cover"
+              className="object-contain"
               priority
             />
           </div>
@@ -160,12 +160,12 @@ export default async function ProjectDetailPage({
         return extraImages && extraImages.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-10 md:mb-16">
             {extraImages.map((img, idx) => (
-              <div key={idx} className="relative aspect-[16/9] rounded-lg overflow-hidden border border-border">
+              <div key={idx} className="relative aspect-[16/9] rounded-lg overflow-hidden border border-border bg-black">
                 <Image
                   src={img}
                   alt={`${project.name} screenshot ${idx + 1}`}
                   fill
-                  className="object-cover object-top"
+                  className="object-contain"
                 />
               </div>
             ))}

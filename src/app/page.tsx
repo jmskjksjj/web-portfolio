@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { NebulaScene, type HeroLine } from "@/components/NebulaScene";
+import { SplashScene } from "@/components/SplashScene";
 import { useLang } from "@/components/LangProvider";
 
 function useIsMobile(breakpoint = 768) {
@@ -20,6 +21,19 @@ function useIsMobile(breakpoint = 768) {
 export default function Home() {
   const { t, lang } = useLang();
   const m = useIsMobile();
+  const [showSplash, setShowSplash] = useState(true);
+  const [heroReady, setHeroReady] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("splashShown")) {
+      setShowSplash(false);
+    }
+  }, []);
+
+  const handleHeroReady = () => {
+    sessionStorage.setItem("splashShown", "1");
+    setHeroReady(true);
+  };
 
   const heroLines: HeroLine[] = [
     { text: "AI SYSTEMS ARCHITECT", y: m ? 2.2 : 2.6, size: m ? 0.11 : 0.15, opacity: 0.6, letterSpacing: 0.12 },
@@ -35,13 +49,19 @@ export default function Home() {
     <>
       {/* Hero with 3D */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <NebulaScene heroLines={heroLines} />
+        {showSplash ? (
+          <SplashScene heroLines={heroLines} onHeroReady={handleHeroReady} />
+        ) : (
+          <NebulaScene heroLines={heroLines} />
+        )}
 
         {/* CTA button */}
-        <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-10">
+        <div className={`absolute bottom-28 left-1/2 -translate-x-1/2 z-10 transition-opacity duration-700 ${
+          (!showSplash || heroReady) ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}>
           <Link
             href="/projects/web"
-            className="inline-flex items-center gap-2 text-sm font-medium text-text-primary border border-border hover:border-border-hover px-5 py-2.5 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors"
           >
             {t("hero.cta")}
             <ArrowRight size={14} />
@@ -49,7 +69,9 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-opacity duration-700 ${
+          (!showSplash || heroReady) ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}>
           <span className="text-[10px] uppercase tracking-[0.15em] text-text-muted font-mono">
             {t("hero.scroll")}
           </span>

@@ -54,8 +54,9 @@ export default function AboutPage() {
         <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-text-muted mb-3">
           {t("about.title")}
         </p>
-        <h1 className="text-2xl md:text-4xl font-light tracking-tight mb-4">
-          {isKo ? "김 선 재" : "Kim Seon Jae"}
+        <h1 className="text-2xl md:text-4xl font-light tracking-tight mb-4 flex items-baseline gap-3 md:gap-4">
+          <span>{isKo ? "김 선 재" : "Kim Seon Jae"}</span>
+          <span className="text-xs md:text-sm font-light text-text-muted tracking-wide">Vibe Coder</span>
         </h1>
         <p className="text-base md:text-lg text-text-secondary font-light leading-relaxed max-w-2xl">
           {t("about.oneliner")}

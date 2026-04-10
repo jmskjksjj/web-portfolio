@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "./ThemeProvider";
 import { useLang } from "./LangProvider";
 import { Menu, X } from "lucide-react";
@@ -19,7 +19,18 @@ export function Navbar() {
   const { theme, toggle } = useTheme();
   const { lang, toggle: toggleLang } = useLang();
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.removeItem("splashShown");
+    if (pathname === "/") {
+      window.location.reload();
+    } else {
+      router.push("/");
+    }
+  };
 
   // Close menu on route change
   useEffect(() => {
@@ -37,9 +48,9 @@ export function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-nav-bg backdrop-blur-xl border-b border-border">
         {/* Desktop */}
         <div className="hidden md:grid grid-cols-3 items-center h-full px-12">
-          <Link href="/" className="text-sm font-medium text-text-primary tracking-tight">
+          <a href="/" onClick={handleLogoClick} className="text-sm font-medium text-text-primary tracking-tight cursor-pointer">
             SeonJ
-          </Link>
+          </a>
 
           <div className="flex items-center justify-center gap-8">
             {links.map((link) => (
@@ -77,9 +88,9 @@ export function Navbar() {
 
         {/* Mobile */}
         <div className="flex md:hidden items-center justify-between h-full px-5">
-          <Link href="/" className="text-sm font-medium text-text-primary tracking-tight">
+          <a href="/" onClick={handleLogoClick} className="text-sm font-medium text-text-primary tracking-tight cursor-pointer">
             SeonJ
-          </Link>
+          </a>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-1 text-text-secondary hover:text-text-primary transition-colors cursor-pointer"

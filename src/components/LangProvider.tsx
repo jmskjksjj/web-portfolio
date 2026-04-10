@@ -80,8 +80,8 @@ const translations: Record<string, Record<Lang, string>> = {
     ko: "데스크톱 및 모바일 애플리케이션",
   },
   "catpage.mcp": {
-    en: "Model Context Protocol servers for the TAI ecosystem",
-    ko: "TAI 에코시스템을 위한 모델 컨텍스트 프로토콜 서버",
+    en: "Model Context Protocol servers for the \"Archflow\" ecosystem",
+    ko: "\"Archflow\" 에코시스템을 위한 모델 컨텍스트 프로토콜 서버",
   },
   "catpage.other": { en: "Miscellaneous projects", ko: "기타 프로젝트" },
   "catpage.projects": { en: "projects", ko: "개 프로젝트" },

@@ -60,7 +60,7 @@ function Nebula({ count = 5000, isDark = true }) {
     for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      const r = 1.5 + Math.pow(Math.random(), 0.4) * 6;
+      const r = 1.5 + Math.pow(Math.random(), 0.4) * 8.5;
 
       const x = r * Math.sin(phi) * Math.cos(theta);
       const y = r * Math.sin(phi) * Math.sin(theta);
@@ -71,14 +71,14 @@ function Nebula({ count = 5000, isDark = true }) {
       home[i * 3 + 2] = pos[i * 3 + 2] = z;
 
       vel[i * 3] = vel[i * 3 + 1] = vel[i * 3 + 2] = 0;
-      sizes[i] = 0.3 + Math.random() * 0.8;
+      sizes[i] = (0.3 + Math.random() * 0.8) * 0.7;
 
       if (brightIndices.has(i)) {
         isBright[i] = 1;
         brightOrder.push(i);
         // Store index into color arrays (theme switching picks the right palette)
         brightColors.push(Math.floor(Math.random() * STAR_COLORS_DARK.length));
-        brightSizes.push(0.3 + Math.random() * 0.35);
+        brightSizes.push((0.3 + Math.random() * 0.35) * 0.8);
       } else {
         isBright[i] = 0;
       }
@@ -125,6 +125,13 @@ function Nebula({ count = 5000, isDark = true }) {
       waveState.time += dt;
       if (waveState.time > 2.0) {
         waveState.active = false;
+        // Reset colors to base
+        if (meshRef.current?.instanceColor) {
+          const baseC = isDark ? 1.0 : 0.35;
+          const arr = meshRef.current.instanceColor.array as Float32Array;
+          for (let j = 0; j < count * 3; j++) arr[j] = baseC;
+          meshRef.current.instanceColor.needsUpdate = true;
+        }
       }
     }
     const waveSpeed = 4.0;
@@ -187,9 +194,56 @@ function Nebula({ count = 5000, isDark = true }) {
         state.pos[i3 + 1],
         x * sinR + z * cosR
       );
-      dummy.scale.setScalar(state.sizes[i]);
+      // Wave size pulse: particles in the wavefront grow subtly
+      let sizeMult = 1.0;
+      if (waveState.active) {
+        const wdx2 = state.pos[i3] - waveState.ox;
+        const wdy2 = state.pos[i3 + 1] - waveState.oy;
+        const wdz2 = state.pos[i3 + 2] - waveState.oz;
+        const wDist2 = Math.sqrt(wdx2 * wdx2 + wdy2 * wdy2 + wdz2 * wdz2);
+        const waveFront2 = waveState.time * waveSpeed;
+        const distToFront2 = Math.abs(wDist2 - waveFront2);
+        if (distToFront2 < waveWidth && wDist2 > 0.1) {
+          const env = 1 - distToFront2 / waveWidth;
+          const fade = Math.max(0, 1 - waveState.time / 2.0);
+          sizeMult = 1.0 + env * env * fade * 1.2;
+        }
+      }
+
+      dummy.scale.setScalar(state.sizes[i] * sizeMult);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+
+    // Wave color flash: briefly tint particles near the wavefront
+    if (waveState.active && meshRef.current.instanceColor) {
+      const baseColor = isDark ? 1.0 : 0.35;
+      const warmR = isDark ? 1.0 : 0.55;
+      const warmG = isDark ? 0.85 : 0.45;
+      const warmB = isDark ? 0.6 : 0.35;
+      const waveFrontC = waveState.time * waveSpeed;
+      const fadeC = Math.max(0, 1 - waveState.time / 2.0);
+      const colorArr = meshRef.current.instanceColor.array as Float32Array;
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+        const wdx = state.pos[i3] - waveState.ox;
+        const wdy = state.pos[i3 + 1] - waveState.oy;
+        const wdz = state.pos[i3 + 2] - waveState.oz;
+        const wDist = Math.sqrt(wdx * wdx + wdy * wdy + wdz * wdz);
+        const distToFront = Math.abs(wDist - waveFrontC);
+        if (distToFront < waveWidth && wDist > 0.1) {
+          const env = 1 - distToFront / waveWidth;
+          const blend = env * env * fadeC * 0.5;
+          colorArr[i3] = baseColor + (warmR - baseColor) * blend;
+          colorArr[i3 + 1] = baseColor * (1 - blend) + warmG * blend;
+          colorArr[i3 + 2] = baseColor * (1 - blend) + warmB * blend;
+        } else {
+          colorArr[i3] = baseColor;
+          colorArr[i3 + 1] = baseColor;
+          colorArr[i3 + 2] = baseColor;
+        }
+      }
+      meshRef.current.instanceColor.needsUpdate = true;
     }
 
     // Bright stars - use separate meshes per color group for reliable coloring
@@ -208,7 +262,22 @@ function Nebula({ count = 5000, isDark = true }) {
         );
 
         const twinkle = 0.7 + Math.sin(elapsed * 1.2 + i * 0.7) * 0.3;
-        dummy.scale.setScalar(state.brightSizes[b] * 2.0 * twinkle);
+        // Wave size pulse for bright stars too
+        let bSizeMult = 1.0;
+        if (waveState.active) {
+          const wdx = state.pos[i3] - waveState.ox;
+          const wdy = state.pos[i3 + 1] - waveState.oy;
+          const wdz = state.pos[i3 + 2] - waveState.oz;
+          const wDist = Math.sqrt(wdx * wdx + wdy * wdy + wdz * wdz);
+          const waveFront = waveState.time * waveSpeed;
+          const distToFront = Math.abs(wDist - waveFront);
+          if (distToFront < waveWidth && wDist > 0.1) {
+            const env = 1 - distToFront / waveWidth;
+            const fade = Math.max(0, 1 - waveState.time / 2.0);
+            bSizeMult = 1.0 + env * env * fade * 0.8;
+          }
+        }
+        dummy.scale.setScalar(state.brightSizes[b] * 2.0 * twinkle * bSizeMult);
         dummy.updateMatrix();
         brightRef.current.setMatrixAt(b, dummy.matrix);
       }

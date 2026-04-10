@@ -42,9 +42,9 @@ export const projects: Project[] = [
     descriptionKo:
       "건축 설계공모를 위한 9단계 AI 오케스트레이션 플랫폼. Claude 멀티에이전트 시스템으로 웨이브 기반 병렬 실행 및 실시간 WebSocket 업데이트.",
     detail:
-      "The central nervous system of the TAI ecosystem. arch-hub coordinates 6 MCP servers through a 9-phase pipeline, from document analysis to drawing generation. Each phase uses Claude AI agents that run in parallel waves, cross-validate results, and stream progress via WebSocket. The frontend is a full Next.js 16 app with 59 React components, real-time phase monitoring, and interactive result views.",
+      "The central nervous system of the \"Archflow\" ecosystem. arch-hub coordinates 6 MCP servers through a 9-phase pipeline, from document analysis to drawing generation. Each phase uses Claude AI agents that run in parallel waves, cross-validate results, and stream progress via WebSocket. The frontend is a full Next.js 16 app with 59 React components, real-time phase monitoring, and interactive result views.",
     detailKo:
-      "TAI 에코시스템의 중추 신경계. 6개 MCP 서버를 9단계 파이프라인으로 조율하여 문서 분석부터 도면 생성까지 수행합니다. 각 단계에서 Claude AI 에이전트가 병렬 웨이브로 실행되며, 교차 검증 후 WebSocket으로 실시간 진행 상황을 스트리밍합니다. 프론트엔드는 59개 React 컴포넌트로 구성된 Next.js 16 앱으로, 실시간 단계 모니터링과 인터랙티브 결과 뷰를 제공합니다.",
+      "\"Archflow\" 에코시스템의 중추 신경계. 6개 MCP 서버를 9단계 파이프라인으로 조율하여 문서 분석부터 도면 생성까지 수행합니다. 각 단계에서 Claude AI 에이전트가 병렬 웨이브로 실행되며, 교차 검증 후 WebSocket으로 실시간 진행 상황을 스트리밍합니다. 프론트엔드는 59개 React 컴포넌트로 구성된 Next.js 16 앱으로, 실시간 단계 모니터링과 인터랙티브 결과 뷰를 제공합니다.",
     techStack: [
       "Next.js 16",
       "React 19",
@@ -157,13 +157,13 @@ export const projects: Project[] = [
     type: "Marketing Site",
     typeKo: "소개 웹사이트",
     description:
-      "Public-facing information site introducing the TAI system to potential users and stakeholders.",
+      "Public-facing information site introducing the \"Archflow\" system to potential users and stakeholders.",
     descriptionKo:
-      "TAI 시스템을 잠재 사용자와 이해관계자에게 소개하는 공개 정보 사이트.",
+      "\"Archflow\" 시스템을 잠재 사용자와 이해관계자에게 소개하는 공개 정보 사이트.",
     detail:
-      "A clean, informational site built to explain the TAI ecosystem to non-technical audiences. Covers the 9-phase pipeline, MCP server architecture, and use cases for architectural firms. Built with Next.js 15 and TailwindCSS.",
+      "A clean, informational site built to explain the \"Archflow\" ecosystem to non-technical audiences. Covers the 9-phase pipeline, MCP server architecture, and use cases for architectural firms. Built with Next.js 15 and TailwindCSS.",
     detailKo:
-      "비기술 대상자에게 TAI 에코시스템을 설명하기 위한 깔끔한 정보 사이트. 9단계 파이프라인, MCP 서버 아키텍처, 건축사무소 활용 사례를 다룹니다. Next.js 15와 TailwindCSS로 구축.",
+      "비기술 대상자에게 \"Archflow\" 에코시스템을 설명하기 위한 깔끔한 정보 사이트. 9단계 파이프라인, MCP 서버 아키텍처, 건축사무소 활용 사례를 다룹니다. Next.js 15와 TailwindCSS로 구축.",
     techStack: ["Next.js 15", "React 19", "TailwindCSS"],
     status: "production",
     images: [
@@ -178,13 +178,13 @@ export const projects: Project[] = [
     type: "Dashboard SPA",
     typeKo: "대시보드 SPA",
     description:
-      "Project progress dashboard. Real-time monitoring of all TAI ecosystem components and pipeline status.",
+      "Project progress dashboard. Real-time monitoring of all \"Archflow\" ecosystem components and pipeline status.",
     descriptionKo:
-      "프로젝트 진행 대시보드. TAI 에코시스템 전체 컴포넌트와 파이프라인 상태를 실시간 모니터링.",
+      "프로젝트 진행 대시보드. \"Archflow\" 에코시스템 전체 컴포넌트와 파이프라인 상태를 실시간 모니터링.",
     detail:
-      "A React SPA that provides a real-time overview of all running TAI components. Shows pipeline execution status, server health, task queues, and completion metrics. Built with Vite for fast development and Zustand for state management.",
+      "A React SPA that provides a real-time overview of all running \"Archflow\" components. Shows pipeline execution status, server health, task queues, and completion metrics. Built with Vite for fast development and Zustand for state management.",
     detailKo:
-      "실행 중인 모든 TAI 컴포넌트의 실시간 개요를 제공하는 React SPA. 파이프라인 실행 상태, 서버 상태, 작업 대기열, 완료 메트릭을 표시합니다. Vite로 빠른 개발, Zustand로 상태 관리.",
+      "실행 중인 모든 \"Archflow\" 컴포넌트의 실시간 개요를 제공하는 React SPA. 파이프라인 실행 상태, 서버 상태, 작업 대기열, 완료 메트릭을 표시합니다. Vite로 빠른 개발, Zustand로 상태 관리.",
     techStack: ["React 19", "Vite 7", "Zustand", "TailwindCSS"],
     status: "active",
     video: "/projects/arch-work-hub/video.mp4",
@@ -202,13 +202,13 @@ export const projects: Project[] = [
     type: "Desktop App · Electron + Next.js",
     typeKo: "데스크톱 앱 · Electron + Next.js",
     description:
-      "Native desktop client for the TAI ecosystem. 7 integrated modules — Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning — with embedded 3D law visualization and real-time pipeline monitoring.",
+      "Native desktop client for the \"Archflow\" ecosystem. 7 integrated modules — Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning — with embedded 3D law visualization and real-time pipeline monitoring.",
     descriptionKo:
-      "TAI 에코시스템 네이티브 데스크톱 클라이언트. Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning 7개 통합 모듈과 3D 법규 시각화 내장 및 실시간 파이프라인 모니터링.",
+      "\"Archflow\" 에코시스템 네이티브 데스크톱 클라이언트. Workspace, Phase Detail, Checklist, Site Model, Law Check, Analysis, Zoning 7개 통합 모듈과 3D 법규 시각화 내장 및 실시간 파이프라인 모니터링.",
     detail:
-      "More than a wrapper — hub-app is the unified desktop interface for the entire TAI ecosystem. Built with Electron 34, it integrates 7 specialized modules into a single native application. The Workspace module manages competition projects and orchestrates the 9-phase AI pipeline. Phase Detail tracks each stage's progress in real time. The Law Check module embeds the full 3D solar-system law visualization (arch-law-galaxy) directly inside the app, enabling legal research without switching windows. Site Model, Analysis, and Zoning modules provide spatial and regulatory tools for architectural design. The NSIS installer handles deployment on Windows.",
+      "More than a wrapper — hub-app is the unified desktop interface for the entire \"Archflow\" ecosystem. Built with Electron 34, it integrates 7 specialized modules into a single native application. The Workspace module manages competition projects and orchestrates the 9-phase AI pipeline. Phase Detail tracks each stage's progress in real time. The Law Check module embeds the full 3D solar-system law visualization (arch-law-galaxy) directly inside the app, enabling legal research without switching windows. Site Model, Analysis, and Zoning modules provide spatial and regulatory tools for architectural design. The NSIS installer handles deployment on Windows.",
     detailKo:
-      "단순 래퍼가 아닌, TAI 에코시스템 전체를 하나로 통합한 데스크톱 인터페이스. Electron 34 기반으로 7개 전문 모듈을 단일 네이티브 앱에 통합합니다. Workspace 모듈에서 설계공모 프로젝트를 관리하고 9단계 AI 파이프라인을 실행합니다. Phase Detail에서 각 단계 진행을 실시간 추적합니다. Law Check 모듈은 3D 태양계 법규 시각화(arch-law-galaxy)를 앱 내부에 직접 내장하여 창 전환 없이 법규 조사가 가능합니다. Site Model, Analysis, Zoning 모듈이 건축 설계를 위한 공간·규제 도구를 제공합니다.",
+      "단순 래퍼가 아닌, \"Archflow\" 에코시스템 전체를 하나로 통합한 데스크톱 인터페이스. Electron 34 기반으로 7개 전문 모듈을 단일 네이티브 앱에 통합합니다. Workspace 모듈에서 설계공모 프로젝트를 관리하고 9단계 AI 파이프라인을 실행합니다. Phase Detail에서 각 단계 진행을 실시간 추적합니다. Law Check 모듈은 3D 태양계 법규 시각화(arch-law-galaxy)를 앱 내부에 직접 내장하여 창 전환 없이 법규 조사가 가능합니다. Site Model, Analysis, Zoning 모듈이 건축 설계를 위한 공간·규제 도구를 제공합니다.",
     techStack: ["Electron 34", "TypeScript", "Next.js", "Three.js", "NSIS"],
     metrics: [
       { label: "Integrated Modules", value: "7", labelKo: "통합 모듈" },
@@ -382,9 +382,9 @@ export const projects: Project[] = [
     descriptionKo:
       "파이프라인의 진입점. 건축 설계공모 지침서(50-200페이지 PDF)를 입력받아 Claude AI로 구조화된 기계 판독 가능 요구사항으로 분해 — 대지 조건, 공간 프로그램, 심사 기준, 참조 법규 — 이 데이터가 모든 후속 단계를 구동합니다.",
     detail:
-      "Every TAI pipeline run begins here. Competition briefs are dense, unstructured documents mixing legal language, spatial requirements, submission rules, and evaluation criteria across hundreds of pages. This server uses pdfplumber to extract text with layout awareness (preserving tables, headers, and section hierarchy), then sends the content through Claude AI for semantic decomposition. The AI identifies and categorizes every requirement — distinguishing mandatory constraints from preferences, quantitative targets from qualitative guidelines, and explicit rules from implied expectations. It also detects cross-references between sections and extracts all cited laws and standards (building code articles, fire safety regulations, accessibility standards) for downstream legal compliance checking. The structured output becomes the single source of truth that all subsequent pipeline phases reference.",
+      "Every \"Archflow\" pipeline run begins here. Competition briefs are dense, unstructured documents mixing legal language, spatial requirements, submission rules, and evaluation criteria across hundreds of pages. This server uses pdfplumber to extract text with layout awareness (preserving tables, headers, and section hierarchy), then sends the content through Claude AI for semantic decomposition. The AI identifies and categorizes every requirement — distinguishing mandatory constraints from preferences, quantitative targets from qualitative guidelines, and explicit rules from implied expectations. It also detects cross-references between sections and extracts all cited laws and standards (building code articles, fire safety regulations, accessibility standards) for downstream legal compliance checking. The structured output becomes the single source of truth that all subsequent pipeline phases reference.",
     detailKo:
-      "모든 TAI 파이프라인 실행은 여기서 시작됩니다. 설계공모 지침서는 법률 용어, 공간 요구사항, 제출 규칙, 심사 기준이 수백 페이지에 걸쳐 혼재된 비정형 문서입니다. pdfplumber로 레이아웃을 인식하며 텍스트를 추출(표, 제목, 섹션 계층 보존)한 뒤, Claude AI를 통해 의미론적 분해를 수행합니다. AI는 모든 요구사항을 식별하고 분류 — 필수 제약과 선호 사항, 정량적 목표와 정성적 가이드라인, 명시적 규칙과 암묵적 기대를 구분합니다. 또한 섹션 간 교차 참조를 감지하고 인용된 모든 법령과 기준(건축법 조문, 소방 규정, 접근성 기준)을 추출하여 후속 법규 준수 검사에 활용합니다. 구조화된 출력은 모든 후속 파이프라인 단계가 참조하는 단일 진실 소스(single source of truth)가 됩니다.",
+      "모든 \"Archflow\" 파이프라인 실행은 여기서 시작됩니다. 설계공모 지침서는 법률 용어, 공간 요구사항, 제출 규칙, 심사 기준이 수백 페이지에 걸쳐 혼재된 비정형 문서입니다. pdfplumber로 레이아웃을 인식하며 텍스트를 추출(표, 제목, 섹션 계층 보존)한 뒤, Claude AI를 통해 의미론적 분해를 수행합니다. AI는 모든 요구사항을 식별하고 분류 — 필수 제약과 선호 사항, 정량적 목표와 정성적 가이드라인, 명시적 규칙과 암묵적 기대를 구분합니다. 또한 섹션 간 교차 참조를 감지하고 인용된 모든 법령과 기준(건축법 조문, 소방 규정, 접근성 기준)을 추출하여 후속 법규 준수 검사에 활용합니다. 구조화된 출력은 모든 후속 파이프라인 단계가 참조하는 단일 진실 소스(single source of truth)가 됩니다.",
     techStack: ["Python", "FastMCP", "pdfplumber", "Anthropic SDK"],
     status: "production",
     tools: [
@@ -557,13 +557,13 @@ export const categoryLabels: Record<ProjectCategory, string> = {
 export const categoryDescriptions: Record<ProjectCategory, string> = {
   web: "Full-stack web applications and platforms",
   app: "Desktop and mobile applications",
-  mcp: "Model Context Protocol servers for the TAI ecosystem",
+  mcp: "Model Context Protocol servers for the \"Archflow\" ecosystem",
   other: "Miscellaneous projects",
 };
 
 export const categoryDescriptionsKo: Record<ProjectCategory, string> = {
   web: "풀스택 웹 애플리케이션 및 플랫폼",
   app: "데스크톱 및 모바일 애플리케이션",
-  mcp: "TAI 에코시스템을 위한 모델 컨텍스트 프로토콜 서버",
+  mcp: "\"Archflow\" 에코시스템을 위한 모델 컨텍스트 프로토콜 서버",
   other: "기타 프로젝트",
 };
