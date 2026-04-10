@@ -225,7 +225,14 @@ function FadingText({ line, isDark, fadeRef }: {
 
 function HeroText3D({ isDark, lines }: { isDark: boolean; lines: HeroLine[] }) {
   const fadeRef = useRef(0);
-  useFrame((_, delta) => { fadeRef.current = Math.min(1, fadeRef.current + delta * 0.5); });
+  const delayRef = useRef(0);
+  useFrame((_, delta) => {
+    delayRef.current += delta;
+    // Wait 2s after mount before starting fade-in
+    if (delayRef.current > 2.0) {
+      fadeRef.current = Math.min(1, fadeRef.current + delta * 0.5);
+    }
+  });
   if (lines.length === 0) return null;
   return (
     <group position={[0, 0, 2]}>
