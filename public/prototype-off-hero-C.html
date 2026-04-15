@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off Hero — C: Right Bleed Stacked</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .nav-mock {
+    height: 56px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.06em;
+  }
+
+  .nav-mock span { color: #e5e5e5; }
+
+  .hero {
+    height: calc(100vh - 56px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Title stack — Off first line, Hours second */
+  .title-wrap {
+    position: relative;
+    line-height: 0.82;
+  }
+
+  /* Off with LAST O bleeding off right */
+  .title-off {
+    font-size: clamp(280px, 42vw, 640px);
+    font-weight: 200;
+    letter-spacing: -0.06em;
+    color: #fff;
+    white-space: nowrap;
+    /* Push Off right so the final character bleeds */
+    transform: translateX(30vw);
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Hours — smaller, outline, bleeds left slightly */
+  .title-hours {
+    font-size: clamp(180px, 26vw, 380px);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px #2a2a2a;
+    white-space: nowrap;
+    transform: translateX(-8vw);
+    margin-top: 20px;
+    position: relative;
+  }
+
+  /* Divider line between Off and Hours */
+  .title-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #1e1e1e 20%, #1e1e1e 80%, transparent);
+    margin: 24px 0;
+  }
+
+  /* Top label + index */
+  .hero-label {
+    position: absolute;
+    top: 40px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: #333;
+  }
+
+  .hero-index {
+    position: absolute;
+    top: 40px;
+    right: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+
+  /* Subtitle positioned to the left */
+  .subtitle-block {
+    position: absolute;
+    left: clamp(32px, 6vw, 80px);
+    bottom: 80px;
+    max-width: 320px;
+    z-index: 10;
+  }
+
+  .subtitle-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subtitle-label::before {
+    content: '●';
+    color: #c8956c;
+    font-size: 8px;
+  }
+
+  .subtitle-text {
+    font-size: 14px;
+    color: #888;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* Arrow */
+  .hero-arrow {
+    position: absolute;
+    bottom: 40px;
+    right: clamp(32px, 6vw, 80px);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .hero-arrow .arrow {
+    display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(4px); }
+  }
+
+  /* Numeric marker on the left */
+  .year-mark {
+    position: absolute;
+    top: 50%;
+    left: clamp(32px, 6vw, 80px);
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center left;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .title-off {
+      font-size: clamp(180px, 58vw, 360px);
+      transform: translateX(35vw);
+    }
+    .title-hours {
+      font-size: clamp(120px, 38vw, 240px);
+      transform: translateX(-12vw);
+    }
+    .year-mark { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="nav-mock"><span>SeonJ</span> &nbsp;—&nbsp; on &nbsp;—&nbsp; off</div>
+
+  <section class="hero">
+    <div class="hero-label">CONCEPT C &nbsp;/&nbsp; Right Bleed Stacked</div>
+    <div class="hero-index">010 / 10</div>
+
+    <div class="year-mark">— 2026 / Off Hours</div>
+
+    <div class="title-wrap">
+      <div class="title-off">Off</div>
+      <div class="title-divider"></div>
+      <div class="title-hours">Hours</div>
+    </div>
+
+    <div class="subtitle-block">
+      <div class="subtitle-label">What I do when I'm not building</div>
+      <div class="subtitle-text">
+        The things that keep me balanced. Some require endurance, some patience, some company.
+      </div>
+    </div>
+
+    <div class="hero-arrow">
+      <span>SCROLL</span>
+      <span class="arrow">↓</span>
+    </div>
+  </section>
+</body>
+</html>

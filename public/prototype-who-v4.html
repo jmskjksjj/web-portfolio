@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SeonJ — who?</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --stroke: #d4d4d4;
+    --stroke-dim: #3a3a3a;
+    --accent: #e5e5e5;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #fafafa;
+      --stroke: #1a1a1a;
+      --stroke-dim: #c0c0c0;
+      --accent: #171717;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body {
+    background: var(--bg);
+    overflow-x: hidden;
+    cursor: default;
+  }
+  .spacer { height: 16000px; position: relative; }
+  .canvas {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .canvas svg {
+    width: 100%;
+    height: 100%;
+  }
+  .hint {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font: 500 10px/1 'SF Mono', 'Cascadia Code', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--stroke-dim);
+    z-index: 10;
+    transition: opacity 1s;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+<svg id="scene" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" aria-label="One-line journey illustration">
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- ONE CONTINUOUS LINE — the landscape                           -->
+  <!-- Style: confident flowing curves, like the reference images    -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+
+  <path id="journey" d="
+    M -40,195
+    C -10,195 20,194 50,192
+    C 80,190 100,186 120,180
+    C 135,175 145,170 155,168
+    C 170,165 180,166 190,170
+
+    C 195,172 198,168 198,163
+    C 198,157 194,152 188,150
+    C 182,148 176,150 173,155
+    C 170,160 172,166 178,169
+    C 184,172 190,172 195,169
+    C 200,166 202,162 202,157
+    C 202,152 199,148 194,146
+    C 189,144 184,146 181,150
+    C 178,154 178,159 181,163
+    C 184,167 188,168 193,167
+
+    C 200,165 210,170 225,175
+    C 240,180 255,182 270,180
+    C 285,178 295,172 305,165
+
+    C 310,162 312,157 312,150
+    C 312,140 306,134 296,134
+    L 270,134
+    C 260,134 256,138 256,148
+    L 256,170
+    C 256,176 260,180 270,180
+
+    M 296,134
+    C 296,128 290,124 284,124
+    L 272,124
+    C 266,124 262,128 262,134
+
+    M 278,124
+    C 278,118 280,112 284,108
+    C 287,105 290,107 290,111
+    C 290,114 288,117 284,118
+
+    M 262,148
+    L 262,170
+    M 270,134
+    L 270,180
+    M 280,134
+    L 280,180
+    M 290,134
+    L 290,180
+
+    M 270,180
+    C 280,183 295,188 312,195
+    C 330,202 350,208 375,210
+    C 400,212 420,210 440,205
+    C 455,201 465,196 470,190
+
+    C 472,187 468,183 462,184
+    C 456,185 452,189 455,194
+    C 458,199 465,200 470,197
+
+    C 478,192 490,186 505,180
+    C 520,174 535,170 555,168
+    C 575,166 595,168 620,172
+    C 645,176 665,182 680,190
+
+    M 505,180
+    C 508,186 505,193 498,196
+    C 491,199 486,194 487,188
+
+    M 540,170
+    C 543,177 540,183 534,186
+    C 527,189 523,184 524,178
+
+    M 580,168
+    C 582,174 580,180 574,183
+    C 568,186 564,182 565,176
+
+    M 620,172
+    C 625,168 632,164 640,162
+    C 648,160 654,162 654,168
+    L 654,168
+
+    M 654,168
+    C 654,172 650,176 644,178
+    C 638,180 634,178 634,174
+
+    M 654,168
+    L 660,158
+    C 662,154 666,152 670,154
+    L 690,162
+    C 694,163 696,162 696,158
+    L 696,142
+    C 696,138 698,136 702,136
+
+    M 696,158
+    C 696,170 694,182 690,194
+    C 686,206 680,216 672,224
+    C 668,228 664,226 664,220
+  "
+  fill="none"
+  stroke="var(--stroke)"
+  stroke-width="1.3"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  opacity="0.6"
+  />
+
+  <!-- Subtle water in pool -->
+  <rect x="257" y="135" width="38" height="44" rx="2" fill="var(--stroke)" opacity="0.03"/>
+
+  <!-- Subtle water in sea area -->
+  <path d="M 470,208 C 490,204 520,210 550,206 C 580,202 610,208 640,204 L 640,230 L 470,230 Z"
+    fill="var(--stroke)" opacity="0.02"/>
+
+  <!-- Tiny wave marks in the sea -->
+  <g opacity="0.12" stroke="var(--stroke)" stroke-width="0.5" fill="none" stroke-linecap="round">
+    <path d="M 495,212 C 502,209 510,213 518,210"/>
+    <path d="M 530,208 C 537,205 545,209 553,206"/>
+    <path d="M 510,218 C 517,215 525,219 533,216"/>
+    <path d="M 555,214 C 562,211 570,215 578,212"/>
+    <path d="M 480,220 C 487,217 495,221 503,218"/>
+    <path d="M 565,220 C 572,217 580,221 588,218"/>
+  </g>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- TINY CHARACTER (proportional to the landscape)                -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+
+  <g id="person" opacity="0.9">
+    <!-- head -->
+    <circle id="pHead" cx="0" cy="-7.5" r="1.8"
+      fill="none" stroke="var(--stroke)" stroke-width="0.9"/>
+    <!-- body -->
+    <line id="pBody" x1="0" y1="-5.7" x2="0" y2="0"
+      stroke="var(--stroke)" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- left leg -->
+    <line id="pLL" x1="0" y1="0" x2="-1.8" y2="3.5"
+      stroke="var(--stroke)" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- right leg -->
+    <line id="pRL" x1="0" y1="0" x2="1.8" y2="3.5"
+      stroke="var(--stroke)" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- left arm -->
+    <line id="pLA" x1="0" y1="-3.8" x2="-2.5" y2="-1"
+      stroke="var(--stroke)" stroke-width="0.9" stroke-linecap="round"/>
+    <!-- right arm -->
+    <line id="pRA" x1="0" y1="-3.8" x2="2.5" y2="-1"
+      stroke="var(--stroke)" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+  <!-- Fish (hidden until caught) -->
+  <g id="theFish" opacity="0">
+    <path d="M 0,0 C 1.5,-1.2 4,-1.5 6,0 C 4,1.5 1.5,1.2 0,0 Z
+             M 6,0 L 8,-1.8 L 8,1.8 Z
+             M 2.2,-0.3 C 2.5,-0.3 2.5,0.3 2.2,0.3"
+      fill="none" stroke="var(--stroke)" stroke-width="0.6" stroke-linecap="round" opacity="0.7"/>
+  </g>
+
+</svg>
+</div>
+
+<div class="spacer"></div>
+<div class="hint" id="hint">scroll</div>
+
+<script>
+(function(){
+'use strict';
+
+const $ = id => document.getElementById(id);
+const path    = $('journey');
+const svg     = $('scene');
+const person  = $('person');
+const pLL     = $('pLL');
+const pRL     = $('pRL');
+const pLA     = $('pLA');
+const pRA     = $('pRA');
+const pBody   = $('pBody');
+const pHead   = $('pHead');
+const hint    = $('hint');
+const theFish = $('theFish');
+
+const LEN = path.getTotalLength();
+
+// Zones by scroll progress [start, end]
+const ZONE = {
+  approach:  [0.00, 0.15],   // walking to track
+  track:     [0.15, 0.35],   // running around the track
+  toPool:    [0.35, 0.42],   // walking to pool
+  pool:      [0.42, 0.60],   // dive + swim
+  toSea:     [0.60, 0.72],   // walking to sea
+  fishing:   [0.72, 1.00],   // sit, fish, catch
+};
+
+function inZ(p, z) { return p >= z[0] && p < z[1]; }
+function zT(p, z)  { return Math.max(0, Math.min(1, (p - z[0]) / (z[1] - z[0]))); }
+
+// Pose helpers
+function walk(t, spd) {
+  const s = Math.sin(t * spd);
+  const c = Math.cos(t * spd);
+  pLL.setAttribute('x2', (-1.8 + s * 2.5).toFixed(2));
+  pLL.setAttribute('y2', (3.5 - Math.abs(s) * 0.8).toFixed(2));
+  pRL.setAttribute('x2', (1.8 - s * 2.5).toFixed(2));
+  pRL.setAttribute('y2', (3.5 - Math.abs(c) * 0.6).toFixed(2));
+  pLA.setAttribute('x2', (-2.5 - s * 1.5).toFixed(2));
+  pLA.setAttribute('y2', (-1 + s * 0.8).toFixed(2));
+  pRA.setAttribute('x2', (2.5 + s * 1.5).toFixed(2));
+  pRA.setAttribute('y2', (-1 - s * 0.8).toFixed(2));
+}
+
+function run(t) {
+  const s = Math.sin(t * 20);
+  const c = Math.cos(t * 20);
+  pLL.setAttribute('x2', (-1 + s * 3.5).toFixed(2));
+  pLL.setAttribute('y2', (3 - Math.abs(s) * 1.2).toFixed(2));
+  pRL.setAttribute('x2', (1 - s * 3.5).toFixed(2));
+  pRL.setAttribute('y2', (3 - Math.abs(c) * 1).toFixed(2));
+  pLA.setAttribute('x2', (-3 - s * 2.2).toFixed(2));
+  pLA.setAttribute('y2', (-2.5 + s * 1.2).toFixed(2));
+  pRA.setAttribute('x2', (3 + s * 2.2).toFixed(2));
+  pRA.setAttribute('y2', (-2.5 - s * 1.2).toFixed(2));
+}
+
+function swim(t) {
+  const s = Math.sin(t * 8);
+  pLL.setAttribute('x2', (-1.5 + s * 2).toFixed(2));
+  pLL.setAttribute('y2', '3');
+  pRL.setAttribute('x2', (1.5 - s * 2).toFixed(2));
+  pRL.setAttribute('y2', '3');
+  pLA.setAttribute('x2', (-3 + s * 4).toFixed(2));
+  pLA.setAttribute('y2', (-2 + Math.abs(s) * 1.5).toFixed(2));
+  pRA.setAttribute('x2', (3 - s * 4).toFixed(2));
+  pRA.setAttribute('y2', (-2 + Math.abs(s) * 1.5).toFixed(2));
+}
+
+function sit() {
+  pBody.setAttribute('x2', '0.8');
+  pBody.setAttribute('y2', '0.5');
+  pLL.setAttribute('x2', '-2.5');
+  pLL.setAttribute('y2', '2.5');
+  pRL.setAttribute('x2', '3');
+  pRL.setAttribute('y2', '1.5');
+  pLA.setAttribute('x2', '-1.8');
+  pLA.setAttribute('y2', '-1.5');
+  pRA.setAttribute('x2', '3.5');
+  pRA.setAttribute('y2', '-4');
+}
+
+function stand() {
+  pBody.setAttribute('x2', '0');
+  pBody.setAttribute('y2', '0');
+  pLL.setAttribute('x2', '-1.8');
+  pLL.setAttribute('y2', '3.5');
+  pRL.setAttribute('x2', '1.8');
+  pRL.setAttribute('y2', '3.5');
+  pLA.setAttribute('x2', '-2.5');
+  pLA.setAttribute('y2', '-1');
+  pRA.setAttribute('x2', '2.5');
+  pRA.setAttribute('y2', '-1');
+}
+
+function diveUp() {
+  pLL.setAttribute('x2', '-0.5');
+  pLL.setAttribute('y2', '3.5');
+  pRL.setAttribute('x2', '0.5');
+  pRL.setAttribute('y2', '3.5');
+  pLA.setAttribute('x2', '-1');
+  pLA.setAttribute('y2', '-6');
+  pRA.setAttribute('x2', '1');
+  pRA.setAttribute('y2', '-6');
+}
+
+// State
+let smooth = 0;
+let time = 0;
+let prev = 0;
+let fishCaught = false;
+let fishTime = 0;
+
+function frame(ts) {
+  const dt = prev ? (ts - prev) / 1000 : 0.016;
+  prev = ts;
+  time += dt;
+
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  const raw = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+  smooth += (raw - smooth) * 0.06;
+
+  // Hint
+  hint.style.opacity = smooth > 0.01 ? '0' : '0.6';
+
+  // Position on path
+  const dist = smooth * LEN;
+  const pt = path.getPointAtLength(Math.min(dist, LEN - 1));
+
+  let cx = pt.x;
+  let cy = pt.y;
+  let op = 0.9;
+
+  // Reset body line
+  pBody.setAttribute('x1', '0');
+  pBody.setAttribute('y1', '-5.7');
+  pBody.setAttribute('x2', '0');
+  pBody.setAttribute('y2', '0');
+
+  // Zone behavior
+  if (inZ(smooth, ZONE.approach)) {
+    walk(time, 10);
+  }
+  else if (inZ(smooth, ZONE.track)) {
+    run(time);
+  }
+  else if (inZ(smooth, ZONE.toPool)) {
+    walk(time, 10);
+  }
+  else if (inZ(smooth, ZONE.pool)) {
+    const t = zT(smooth, ZONE.pool);
+    if (t < 0.12) {
+      walk(time, 8);
+    } else if (t < 0.25) {
+      // On edge, preparing
+      stand();
+      pLA.setAttribute('x2', '-1');
+      pLA.setAttribute('y2', '-6');
+      pRA.setAttribute('x2', '1');
+      pRA.setAttribute('y2', '-6');
+    } else if (t < 0.38) {
+      // Diving arc
+      const d = (t - 0.25) / 0.13;
+      cx = 278 + d * 6;
+      cy = 124 - Math.sin(d * Math.PI) * 22 + d * 18;
+      diveUp();
+      op = 0.85;
+    } else if (t < 0.48) {
+      // Underwater
+      const u = (t - 0.38) / 0.10;
+      cx = 275 + u * 4;
+      cy = 148 + u * 8;
+      op = 0.4;
+      swim(time);
+    } else {
+      // Swimming across
+      const sw = (t - 0.48) / 0.52;
+      cx = 260 + sw * 30;
+      cy = 160;
+      op = 0.5;
+      swim(time);
+    }
+  }
+  else if (inZ(smooth, ZONE.toSea)) {
+    op = 0.9;
+    walk(time, 10);
+  }
+  else if (inZ(smooth, ZONE.fishing)) {
+    const t = zT(smooth, ZONE.fishing);
+    op = 0.9;
+    if (t < 0.12) {
+      walk(time, 7);
+    } else {
+      sit();
+      // Fish catch
+      if (t > 0.55) {
+        if (!fishCaught) { fishCaught = true; fishTime = 0; }
+        fishTime += dt;
+        const cp = Math.min(1, fishTime * 0.35);
+        const fy = 224 - cp * 35;
+        theFish.setAttribute('opacity', String(Math.min(0.7, cp * 1.8)));
+        theFish.setAttribute('transform',
+          `translate(${(668 - cp * 4).toFixed(1)}, ${fy.toFixed(1)}) scale(${(0.6 + cp * 0.4).toFixed(2)})`);
+      }
+    }
+  }
+
+  // Reset fish when not fishing
+  if (!inZ(smooth, ZONE.fishing)) {
+    theFish.setAttribute('opacity', '0');
+    fishCaught = false;
+    fishTime = 0;
+  }
+
+  // Character position
+  person.setAttribute('transform', `translate(${cx.toFixed(1)}, ${cy.toFixed(1)})`);
+  person.setAttribute('opacity', String(op));
+
+  // Camera — smooth follow with breathing room
+  const vw = 200;
+  const vh = 120;
+  const tx = cx - vw * 0.38;
+  const ty = cy - vh * 0.55;
+  const camX = Math.max(-40, Math.min(tx, 550));
+  const camY = Math.max(70, Math.min(ty, 160));
+  svg.setAttribute('viewBox',
+    `${camX.toFixed(1)} ${camY.toFixed(1)} ${vw} ${vh}`);
+
+  requestAnimationFrame(frame);
+}
+
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

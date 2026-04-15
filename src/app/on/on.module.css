@@ -1,0 +1,180 @@
+/* Grain texture overlay */
+.grain {
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── Hero ── */
+.hero {
+  height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: clamp(155px, 19vh, 245px);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Top-left label */
+.heroLabel {
+  position: absolute;
+  top: 40px;
+  left: clamp(32px, 6vw, 80px);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  z-index: 10;
+}
+
+.heroLabel::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Title wrap — On bleeds left, Hours outline below */
+.titleWrap {
+  position: relative;
+  width: 100%;
+  line-height: 0.82;
+}
+
+.titleOn {
+  font-size: clamp(280px, 42vw, 640px);
+  font-weight: 200;
+  letter-spacing: -0.06em;
+  color: var(--text-primary);
+  position: relative;
+  white-space: nowrap;
+  /* -0.335em moves the container left by half of O's glyph width (~0.67em),
+     so exactly 50% of the O is visible — independent of viewport size. */
+  transform: translateX(-0.335em);
+  z-index: 2;
+}
+
+/* O keeps full size; n is rendered at half the O's height (0.5em of parent) */
+.letterO {
+  display: inline-block;
+}
+
+.letterN {
+  display: inline-block;
+  font-size: 0.5em;
+  vertical-align: baseline;
+  margin-left: -0.02em;
+}
+
+.titleHours {
+  position: absolute;
+  bottom: 80px;
+  left: clamp(32px, 6vw, 80px);
+  font-size: clamp(72px, 9vw, 140px);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border);
+  line-height: 1;
+  z-index: 3;
+}
+
+/* Bottom-right meta block — sits above the footer line */
+.heroMeta {
+  position: absolute;
+  bottom: 80px;
+  right: clamp(32px, 6vw, 80px);
+  text-align: right;
+  z-index: 3;
+}
+
+.heroMetaLabel {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  margin-bottom: 10px;
+}
+
+.heroMetaText {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
+/* Bottom footer — scroll indicator */
+.heroFooter {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 clamp(32px, 6vw, 80px);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  z-index: 10;
+}
+
+.heroFooterLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 20px;
+}
+
+.heroArrow {
+  font-size: 14px;
+  color: var(--text-muted);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(4px); }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .hero {
+    height: calc(100dvh - 56px);
+  }
+
+  .titleOn {
+    font-size: clamp(200px, 60vw, 400px);
+  }
+
+  .titleHours {
+    font-size: clamp(48px, 14vw, 80px);
+    bottom: 72px;
+  }
+
+  .heroMeta {
+    bottom: 72px;
+    max-width: 240px;
+  }
+
+  .heroMetaText {
+    font-size: 12px;
+    white-space: normal;
+  }
+}

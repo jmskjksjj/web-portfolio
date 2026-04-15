@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Page — One Line Journey v3</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    overflow-x: hidden;
+  }
+  .scroll-spacer { height: 12000px; }
+  .scene {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .scene svg { width: 100%; height: 100%; }
+  .scroll-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3a3a3a;
+    font-family: monospace;
+    z-index: 10;
+    transition: opacity 0.8s;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+<svg id="mainSvg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- THE ONE CONTINUOUS LINE — already fully drawn           -->
+  <!-- Artistic flowing landscape: road → track → pool → sea  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <!-- Main continuous landscape line -->
+  <path id="mainPath" d="
+    M -20 135
+    C 0 135, 10 135, 25 134
+    C 40 133, 55 131, 70 128
+    C 85 125, 95 122, 110 120
+    C 125 118, 135 118, 148 119
+
+    C 155 119.5, 158 117, 160 113
+    C 162 109, 166 106, 170 104
+    C 174 102, 178 102, 182 104
+    C 186 106, 188 110, 190 113
+    C 192 116, 194 119, 198 120
+    C 202 121, 206 119, 209 116
+    C 212 113, 214 109, 216 106
+    C 218 103, 222 102, 226 103
+    C 230 104, 233 107, 235 111
+    C 237 115, 239 118, 243 119.5
+    C 248 121, 255 120, 262 119
+
+    C 270 118, 278 120, 285 123
+    C 290 125, 292 128, 293 132
+    C 294 138, 290 142, 285 143
+    C 278 144, 272 142, 270 138
+    C 268 134, 270 130, 275 128
+    C 280 126, 286 127, 290 130
+    C 294 133, 293 138, 289 140
+
+    C 285 142, 282 140, 282 136
+    C 282 134, 284 133, 286 134
+
+    M 289 140
+    C 295 143, 302 144, 310 142
+    C 318 140, 325 136, 330 134
+    C 335 132, 340 132, 348 133
+
+    C 352 133.5, 354 131, 355 128
+    L 355 106
+    C 355 103, 353 101, 350 101
+    L 326 101
+    C 323 101, 321 103, 321 106
+    L 321 128
+    C 321 131, 323 133, 326 133.5
+
+    M 350 101
+    C 350 98, 348 96, 345 96
+    L 331 96
+    C 328 96, 326 98, 326 101
+
+    M 338 96
+    C 338 93, 338 90, 340 88
+    C 342 86, 344 88, 344 90
+
+    M 326 133
+    L 326 106
+    M 334 101
+    L 334 133
+    M 342 101
+    L 342 133
+
+    M 348 133
+    C 355 134, 362 136, 370 140
+    C 378 144, 388 148, 400 150
+    C 415 153, 430 154, 448 153
+
+    C 460 152, 468 150, 472 148
+    C 476 146, 478 144, 478 142
+    L 478 142
+
+    M 400 150
+    C 402 154, 400 158, 396 160
+    C 392 162, 388 160, 386 156
+
+    M 420 153
+    C 422 157, 420 162, 416 164
+    C 412 166, 408 163, 407 159
+
+    M 445 153
+    C 446 157, 444 161, 440 163
+    C 436 165, 432 162, 432 158
+
+    M 472 148
+    C 476 147, 480 148, 482 150
+    L 482 150
+    C 483 152, 482 154, 480 155
+    C 478 156, 476 155, 475 153
+
+    M 482 150
+    C 486 146, 490 144, 496 142
+    L 530 142
+  "
+  stroke="#e5e5e5" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+
+  <!-- Pool water subtle fill -->
+  <rect x="322" y="102" width="32" height="30" rx="1" fill="#0e1e2a" opacity="0.35"/>
+
+  <!-- Water/waves in sea area -->
+  <path d="M 385 156 C 392 153, 400 156, 408 153" stroke="#1a2a3a" stroke-width="0.5" fill="none" opacity="0.25"/>
+  <path d="M 415 158 C 422 155, 430 158, 438 155" stroke="#1a2a3a" stroke-width="0.5" fill="none" opacity="0.25"/>
+  <path d="M 395 162 C 402 159, 410 162, 418 159" stroke="#1a2a3a" stroke-width="0.5" fill="none" opacity="0.2"/>
+  <path d="M 430 160 C 437 157, 445 160, 453 157" stroke="#1a2a3a" stroke-width="0.5" fill="none" opacity="0.2"/>
+
+  <!-- Fishing rod + line (static, visible when in zone) -->
+  <g id="fishingSetup" opacity="0">
+    <path d="M 478 142 C 477 138, 478 132, 480 126 C 482 120, 486 114, 492 108" stroke="#e5e5e5" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+    <path id="fLine" d="M 492 108 C 490 116, 488 128, 487 138 C 486 148, 484 155, 482 160" stroke="#e5e5e5" stroke-width="0.4" fill="none" opacity="0.35"/>
+  </g>
+
+  <!-- Fish -->
+  <g id="fish" opacity="0">
+    <path d="M 0 0 C 2 -1.5, 5 -2, 8 0 C 5 2, 2 1.5, 0 0 M 8 0 L 10.5 -2 L 10.5 2 Z M 3 -0.5 C 3.5 -0.5, 3.5 0.2, 3 0.2"
+      fill="none" stroke="#e5e5e5" stroke-width="0.6" stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- ═══ TINY CHARACTER ═══ -->
+  <g id="char" opacity="0.85">
+    <circle id="cHead" cx="0" cy="-8" r="2" fill="none" stroke="#e5e5e5" stroke-width="0.9"/>
+    <path id="cBody" d="M 0 -6 L 0 0" stroke="#e5e5e5" stroke-width="0.9" stroke-linecap="round"/>
+    <path id="cLegs" d="M 0 0 L -2 4 M 0 0 L 2 4" stroke="#e5e5e5" stroke-width="0.9" stroke-linecap="round"/>
+    <path id="cArms" d="M 0 -4 L -3 -1 M 0 -4 L 3 -1" stroke="#e5e5e5" stroke-width="0.9" stroke-linecap="round"/>
+  </g>
+
+</svg>
+</div>
+
+<div class="scroll-spacer"></div>
+<div class="scroll-hint" id="hint">&#8595; scroll &#8595;</div>
+
+<script>
+(function() {
+
+const svg = document.getElementById('mainSvg');
+const path = document.getElementById('mainPath');
+const char = document.getElementById('char');
+const cLegs = document.getElementById('cLegs');
+const cArms = document.getElementById('cArms');
+const cBody = document.getElementById('cBody');
+const cHead = document.getElementById('cHead');
+const hint = document.getElementById('hint');
+const fishSetup = document.getElementById('fishingSetup');
+const fLine = document.getElementById('fLine');
+const fish = document.getElementById('fish');
+
+const totalLen = path.getTotalLength();
+let smooth = 0;
+let time = 0;
+let prev = 0;
+let fishT = 0;
+let fishStarted = false;
+
+// Zones (by progress 0-1)
+const Z = {
+  walk1:  [0, 0.18],     // walking to track
+  track:  [0.18, 0.42],  // running the track loop
+  walk2:  [0.42, 0.52],  // walking to pool
+  dive:   [0.52, 0.68],  // pool area
+  walk3:  [0.68, 0.80],  // walking to sea
+  fish:   [0.80, 1.0],   // fishing
+};
+
+function inZone(p, z) { return p >= z[0] && p < z[1]; }
+function zoneT(p, z) { return (p - z[0]) / (z[1] - z[0]); }
+
+function walkPose(t, speed) {
+  const c = Math.sin(t * speed);
+  const leg = c * 25;
+  const arm = -c * 18;
+  const lx1 = -2 + Math.sin(leg * Math.PI/180) * 3;
+  const lx2 = 2 - Math.sin(leg * Math.PI/180) * 3;
+  const ax1 = -3 + Math.sin(arm * Math.PI/180) * 2;
+  const ax2 = 3 - Math.sin(arm * Math.PI/180) * 2;
+  cLegs.setAttribute('d', `M 0 0 L ${lx1.toFixed(1)} 4 M 0 0 L ${lx2.toFixed(1)} 4`);
+  cArms.setAttribute('d', `M 0 -4 L ${ax1.toFixed(1)} -1 M 0 -4 L ${ax2.toFixed(1)} -1`);
+}
+
+function runPose(t) {
+  const c = Math.sin(t * 22);
+  const lx1 = -1.5 + c * 4;
+  const lx2 = 1.5 - c * 4;
+  const ly = 3.5 + Math.abs(c) * 0.5;
+  cLegs.setAttribute('d', `M 0 0 L ${lx1.toFixed(1)} ${ly.toFixed(1)} M 0 0 L ${lx2.toFixed(1)} ${ly.toFixed(1)}`);
+  cArms.setAttribute('d', `M 0 -4 L ${(-3 - c*2).toFixed(1)} -2 M 0 -4 L ${(3 + c*2).toFixed(1)} -2`);
+}
+
+function sitPose() {
+  cLegs.setAttribute('d', 'M 0 0 L -3 3 L -2 4 M 0 0 L 3 2 L 4 3');
+  cArms.setAttribute('d', 'M 0 -4 L -2 -2 M 0 -4 L 4 -5');
+  cBody.setAttribute('d', 'M 0 -6 C 0 -4, 0.5 -2, 1 0');
+}
+
+function resetBody() {
+  cBody.setAttribute('d', 'M 0 -6 L 0 0');
+}
+
+function swimPose(t) {
+  const c = Math.sin(t * 10);
+  cLegs.setAttribute('d', `M 0 0 L ${(-1.5+c*2).toFixed(1)} 3.5 M 0 0 L ${(1.5-c*2).toFixed(1)} 3.5`);
+  cArms.setAttribute('d', `M 0 -4 L ${(-4+c*4).toFixed(1)} ${(-3+Math.abs(c)).toFixed(1)} M 0 -4 L ${(4-c*4).toFixed(1)} ${(-3+Math.abs(c)).toFixed(1)}`);
+}
+
+function update(ts) {
+  const dt = prev ? (ts - prev) / 1000 : 0.016;
+  prev = ts;
+  time += dt;
+
+  const scrollMax = document.body.scrollHeight - window.innerHeight;
+  const raw = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+  smooth += (raw - smooth) * 0.07;
+
+  // Hide hint
+  hint.style.opacity = smooth > 0.015 ? '0' : '1';
+
+  // Character position on path
+  const dist = smooth * totalLen;
+  const pt = path.getPointAtLength(Math.min(dist, totalLen - 1));
+  const pt2 = path.getPointAtLength(Math.min(dist + 1.5, totalLen - 1));
+
+  let cx = pt.x;
+  let cy = pt.y;
+  let charScale = 1;
+  let charOpacity = 0.85;
+
+  resetBody();
+
+  // Zone behaviors
+  if (inZone(smooth, Z.walk1)) {
+    walkPose(time, 12);
+  }
+  else if (inZone(smooth, Z.track)) {
+    runPose(time);
+  }
+  else if (inZone(smooth, Z.walk2)) {
+    walkPose(time, 12);
+  }
+  else if (inZone(smooth, Z.dive)) {
+    const t = zoneT(smooth, Z.dive);
+    if (t < 0.15) {
+      walkPose(time, 10);
+    } else if (t < 0.3) {
+      // Standing on edge
+      cLegs.setAttribute('d', 'M 0 0 L -2 4 M 0 0 L 2 4');
+      cArms.setAttribute('d', 'M 0 -4 L -3 -6 M 0 -4 L 3 -6');
+    } else if (t < 0.45) {
+      // Diving arc
+      const dv = (t - 0.3) / 0.15;
+      cx = 338 + dv * 4;
+      cy = 101 - Math.sin(dv * Math.PI) * 18 + dv * 10;
+      cLegs.setAttribute('d', 'M 0 0 L -1 4 M 0 0 L 1 4');
+      cArms.setAttribute('d', 'M 0 -4 L -1 -8 M 0 -4 L 1 -8');
+    } else if (t < 0.55) {
+      // Underwater entry
+      const uw = (t - 0.45) / 0.1;
+      cx = 340;
+      cy = 106 + uw * 12;
+      charOpacity = 0.5;
+      cLegs.setAttribute('d', 'M 0 0 L -1.5 4 M 0 0 L 1.5 4');
+      cArms.setAttribute('d', 'M 0 -4 L -3 -2 M 0 -4 L 3 -2');
+    } else {
+      // Swimming across
+      const sw = (t - 0.55) / 0.45;
+      cx = 326 + sw * 22;
+      cy = 118;
+      charOpacity = 0.55;
+      swimPose(time);
+    }
+  }
+  else if (inZone(smooth, Z.walk3)) {
+    charOpacity = 0.85;
+    walkPose(time, 10);
+  }
+  else if (inZone(smooth, Z.fish)) {
+    const t = zoneT(smooth, Z.fish);
+    if (t < 0.15) {
+      walkPose(time, 8);
+    } else {
+      sitPose();
+      fishSetup.setAttribute('opacity', '0.8');
+
+      // Fish catch animation
+      if (t > 0.5) {
+        if (!fishStarted) { fishStarted = true; fishT = 0; }
+        fishT += dt;
+        const catchProg = Math.min(1, fishT * 0.4);
+        const fy = 160 - catchProg * 28;
+        fish.setAttribute('opacity', String(Math.min(0.7, catchProg * 1.5)));
+        fish.setAttribute('transform', `translate(${482 - catchProg * 2}, ${fy}) scale(${0.7 + catchProg * 0.3})`);
+
+        // Line tension wobble
+        const wobble = Math.sin(time * 6) * (1 - catchProg) * 2;
+        fLine.setAttribute('d', `M 492 108 C ${490+wobble} 116, ${488+wobble} 128, ${487} ${138 - catchProg*10} C 486 ${148-catchProg*10}, 484 ${155-catchProg*15}, 482 ${160-catchProg*28}`);
+      }
+    }
+  }
+
+  // Reset fishing when not in zone
+  if (!inZone(smooth, Z.fish)) {
+    fishSetup.setAttribute('opacity', '0');
+    fish.setAttribute('opacity', '0');
+    fishStarted = false;
+    fishT = 0;
+  }
+
+  // Apply character transform
+  char.setAttribute('transform', `translate(${cx.toFixed(1)}, ${cy.toFixed(1)})`);
+  char.setAttribute('opacity', String(charOpacity));
+
+  // Camera follow — smooth pan
+  const vw = 180;
+  const vh = 100;
+  const camX = Math.max(-20, Math.min(cx - vw * 0.4, 360));
+  const camY = Math.max(60, Math.min(cy - vh * 0.55, 120));
+  svg.setAttribute('viewBox', `${camX.toFixed(1)} ${camY.toFixed(1)} ${vw} ${vh}`);
+
+  requestAnimationFrame(update);
+}
+
+requestAnimationFrame(update);
+})();
+</script>
+</body>
+</html>

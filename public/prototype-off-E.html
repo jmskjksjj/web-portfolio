@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off — Concept E: Vertical Scroll Editorial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .page { padding: 56px 0 0; }
+
+  /* Side rail — fixed vertical text */
+  .rail {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #333;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  /* Right rail — progress dots */
+  .progress-rail {
+    position: fixed;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .progress-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #333;
+    transition: all 0.3s ease;
+  }
+
+  /* Hero */
+  .hero {
+    height: calc(100vh - 56px);
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(60px, 8vw, 120px);
+    position: relative;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-eyebrow .dash {
+    width: 32px;
+    height: 1px;
+    background: #333;
+  }
+
+  .hero-title {
+    font-size: clamp(56px, 9vw, 120px);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #e5e5e5;
+  }
+
+  .hero-count {
+    font-size: clamp(120px, 18vw, 240px);
+    font-weight: 200;
+    color: #111;
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    letter-spacing: -0.04em;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Hobby entries */
+  .entry {
+    display: grid;
+    grid-template-columns: clamp(60px, 8vw, 120px) 1fr clamp(200px, 30vw, 400px);
+    min-height: 50vh;
+    border-top: 1px solid #141414;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: background 0.6s ease;
+  }
+
+  .entry:hover {
+    background: #0d0d0d;
+  }
+
+  .entry:hover .entry-visual svg {
+    opacity: 0.15;
+    transform: scale(1.05);
+  }
+
+  .entry:hover .entry-name {
+    color: #fff;
+    transform: translateX(8px);
+  }
+
+  .entry:hover .entry-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .entry-index {
+    padding: 40px 0 40px 32px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #333;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 48px;
+  }
+
+  .entry-content {
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .entry-name {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: #ccc;
+    transition: all 0.5s ease;
+    line-height: 1.1;
+  }
+
+  .entry-name-ko {
+    font-size: 15px;
+    color: #444;
+    font-weight: 300;
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .entry-desc {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 300;
+    color: #666;
+    line-height: 1.7;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.5s ease;
+  }
+
+  .entry-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+  }
+
+  .entry-visual svg {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    opacity: 0.06;
+    transition: all 0.6s ease;
+  }
+
+  /* Alternate layout for even entries */
+  .entry:nth-child(even) {
+    grid-template-columns: clamp(60px, 8vw, 120px) clamp(200px, 30vw, 400px) 1fr;
+  }
+
+  .entry:nth-child(even) .entry-visual {
+    order: -1;
+  }
+
+  /* Geometric SVG accents — unique per hobby */
+  .entry-accent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 80px clamp(60px, 8vw, 120px);
+    border-top: 1px solid #141414;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .footer-text {
+    font-size: 12px;
+    color: #333;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="rail">Off — Hobbies & Interests</div>
+
+    <div class="progress-rail">
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="dash"></span>
+          <span>10 things I do off-hours</span>
+        </div>
+        <h1 class="hero-title">Off</h1>
+      </div>
+      <div class="hero-count">10</div>
+    </section>
+
+    <!-- Entries -->
+    <div class="entry">
+      <div class="entry-index">01</div>
+      <div class="entry-content">
+        <div class="entry-name">Running</div>
+        <div class="entry-name-ko">러닝</div>
+        <div class="entry-desc">Clear mind, one stride at a time. The simplest, most honest form of movement.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <circle cx="100" cy="100" r="80" />
+          <circle cx="100" cy="100" r="40" />
+          <line x1="100" y1="20" x2="100" y2="180" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">02</div>
+      <div class="entry-content">
+        <div class="entry-name">Swimming</div>
+        <div class="entry-name-ko">수영</div>
+        <div class="entry-desc">Weightless in the water. No gravity, no notifications, just rhythm and breath.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <path d="M 20 100 Q 60 60 100 100 Q 140 140 180 100" />
+          <path d="M 20 120 Q 60 80 100 120 Q 140 160 180 120" />
+          <path d="M 20 80 Q 60 40 100 80 Q 140 120 180 80" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">03</div>
+      <div class="entry-content">
+        <div class="entry-name">Cycling</div>
+        <div class="entry-name-ko">사이클</div>
+        <div class="entry-desc">Exploring distances on two wheels. The world at 30km/h.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <circle cx="60" cy="120" r="40" />
+          <circle cx="140" cy="120" r="40" />
+          <line x1="60" y1="120" x2="100" y2="60" />
+          <line x1="100" y1="60" x2="140" y2="120" />
+          <line x1="60" y1="120" x2="140" y2="120" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">04</div>
+      <div class="entry-content">
+        <div class="entry-name">Cooking</div>
+        <div class="entry-name-ko">요리</div>
+        <div class="entry-desc">Building flavors from scratch. The most tangible kind of creation.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <rect x="40" y="80" width="120" height="80" rx="4" />
+          <line x1="100" y1="40" x2="100" y2="80" />
+          <circle cx="80" cy="56" r="8" />
+          <circle cx="120" cy="48" r="6" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">05</div>
+      <div class="entry-content">
+        <div class="entry-name">Board Games</div>
+        <div class="entry-name-ko">보드게임</div>
+        <div class="entry-desc">Strategy, bluff, and good company around the table.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <rect x="40" y="40" width="120" height="120" />
+          <line x1="40" y1="100" x2="160" y2="100" />
+          <line x1="100" y1="40" x2="100" y2="160" />
+          <circle cx="70" cy="70" r="4" />
+          <circle cx="130" cy="130" r="4" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">06</div>
+      <div class="entry-content">
+        <div class="entry-name">Poker</div>
+        <div class="entry-name-ko">포커</div>
+        <div class="entry-desc">Reading people beyond the cards. Probability meets psychology. The best game.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <rect x="50" y="30" width="80" height="120" rx="6" transform="rotate(-8 90 90)" />
+          <rect x="70" y="50" width="80" height="120" rx="6" transform="rotate(8 110 110)" />
+          <circle cx="100" cy="100" r="4" fill="white" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">07</div>
+      <div class="entry-content">
+        <div class="entry-name">Soccer</div>
+        <div class="entry-name-ko">축구</div>
+        <div class="entry-desc">Team rhythm on the pitch. Where individual skill meets collective intelligence.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <circle cx="100" cy="100" r="60" />
+          <polygon points="100,45 145,75 130,125 70,125 55,75" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">08</div>
+      <div class="entry-content">
+        <div class="entry-name">Fishing</div>
+        <div class="entry-name-ko">낚시</div>
+        <div class="entry-desc">Patience rewarded by the water. Time slows down.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <line x1="40" y1="40" x2="40" y2="160" />
+          <path d="M 40 40 Q 120 60 160 140" />
+          <circle cx="160" cy="150" r="10" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">09</div>
+      <div class="entry-content">
+        <div class="entry-name">Travel</div>
+        <div class="entry-name-ko">여행</div>
+        <div class="entry-desc">Collecting perspectives, not things. Every city teaches something about how people live.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <path d="M 100 40 L 60 100 L 100 90 L 140 100 Z" />
+          <line x1="100" y1="90" x2="100" y2="160" />
+          <path d="M 80 140 L 100 160 L 120 140" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-index">10</div>
+      <div class="entry-content">
+        <div class="entry-name">Camping</div>
+        <div class="entry-name-ko">캠핑</div>
+        <div class="entry-desc">Simplicity under open skies. Everything you need fits in a bag.</div>
+      </div>
+      <div class="entry-visual">
+        <svg viewBox="0 0 200 200" fill="none" stroke="white" stroke-width="0.5">
+          <polygon points="100,40 40,140 160,140" />
+          <line x1="100" y1="100" x2="100" y2="140" />
+          <circle cx="100" cy="164" r="8" />
+          <circle cx="80" cy="168" r="4" />
+          <circle cx="120" cy="168" r="4" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="footer-text">SeonJ — Off</span>
+      <span class="footer-text">10 hobbies</span>
+    </div>
+  </div>
+</body>
+</html>

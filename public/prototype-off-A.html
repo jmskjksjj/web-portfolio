@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off — Concept A: Typographic Index</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 56px 0 0;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 48px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid #1e1e1e;
+    cursor: default;
+    transition: all 0.3s ease;
+  }
+
+  .item:first-child {
+    border-top: 1px solid #1e1e1e;
+  }
+
+  .item:hover {
+    padding-left: 8px;
+  }
+
+  .item:hover .name {
+    color: #fff;
+  }
+
+  .item:hover .desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .number {
+    font-size: 12px;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    font-weight: 400;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .name {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: #ccc;
+    transition: color 0.3s ease;
+  }
+
+  .desc {
+    font-size: 13px;
+    color: #555;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+  }
+
+  .item:hover .number {
+    color: #666;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-label">Hobbies & Interests</div>
+    <div class="list">
+      <div class="item">
+        <span class="number">01</span>
+        <div class="content">
+          <span class="name">Running</span>
+          <span class="desc">Clear mind, one stride at a time</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">02</span>
+        <div class="content">
+          <span class="name">Swimming</span>
+          <span class="desc">Weightless reset in the water</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">03</span>
+        <div class="content">
+          <span class="name">Cycling</span>
+          <span class="desc">Exploring distances on two wheels</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">04</span>
+        <div class="content">
+          <span class="name">Cooking</span>
+          <span class="desc">Building flavors from scratch</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">05</span>
+        <div class="content">
+          <span class="name">Board Games</span>
+          <span class="desc">Strategy, bluff, and good company</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">06</span>
+        <div class="content">
+          <span class="name">Poker</span>
+          <span class="desc">Reading patterns beyond the cards</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">07</span>
+        <div class="content">
+          <span class="name">Soccer</span>
+          <span class="desc">Team rhythm on the pitch</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">08</span>
+        <div class="content">
+          <span class="name">Fishing</span>
+          <span class="desc">Patience rewarded by the water</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">09</span>
+        <div class="content">
+          <span class="name">Travel</span>
+          <span class="desc">Collecting perspectives, not things</span>
+        </div>
+      </div>
+      <div class="item">
+        <span class="number">10</span>
+        <div class="content">
+          <span class="name">Camping</span>
+          <span class="desc">Simplicity under open skies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,480 @@
+/* Grain texture overlay */
+.grain {
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+/* ── Hero ── */
+.hero {
+  height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: clamp(155px, 19vh, 245px);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Top-left label */
+.heroLabel {
+  position: absolute;
+  top: 40px;
+  left: clamp(32px, 6vw, 80px);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  z-index: 10;
+}
+
+.heroLabel::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Title wrap — Off bleeds left, Hours outline below */
+.titleWrap {
+  position: relative;
+  width: 100%;
+  line-height: 0.82;
+}
+
+.titleOff {
+  font-size: clamp(280px, 42vw, 640px);
+  font-weight: 200;
+  letter-spacing: -0.06em;
+  color: var(--text-primary);
+  position: relative;
+  white-space: nowrap;
+  /* -0.335em moves the container left by half of O's glyph width (~0.67em),
+     so exactly 50% of the O is visible — independent of viewport size. */
+  transform: translateX(-0.335em);
+  z-index: 2;
+}
+
+/* O keeps full size; ff is rendered at half the O's height (0.5em of parent) */
+.letterO {
+  display: inline-block;
+}
+
+.lettersFf {
+  display: inline-block;
+  font-size: 0.5em;
+  vertical-align: baseline;
+  margin-left: -0.02em;
+}
+
+.titleHours {
+  position: absolute;
+  bottom: 80px;
+  left: clamp(32px, 6vw, 80px);
+  font-size: clamp(72px, 9vw, 140px);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border);
+  line-height: 1;
+  z-index: 3;
+}
+
+/* Bottom-right meta block — sits above the footer line */
+.heroMeta {
+  position: absolute;
+  bottom: 80px;
+  right: clamp(32px, 6vw, 80px);
+  text-align: right;
+  z-index: 3;
+}
+
+.heroMetaLabel {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  margin-bottom: 10px;
+}
+
+.heroMetaText {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 300;
+  white-space: nowrap;
+}
+
+/* Bottom footer — scroll indicator */
+.heroFooter {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 clamp(32px, 6vw, 80px);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+  z-index: 10;
+}
+
+.heroFooterLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin: 0 20px;
+}
+
+.heroArrow {
+  font-size: 14px;
+  color: var(--text-muted);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(4px); }
+}
+
+/* ── Section marker ── */
+.sectionMarker {
+  padding: 0 clamp(32px, 6vw, 80px);
+  margin: 0 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.markerLabel {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 400;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+}
+
+.markerLabelSub {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  letter-spacing: 0.06em;
+}
+
+.markerLine {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Grid ── */
+.gridSection {
+  padding: 0 clamp(32px, 6vw, 80px);
+  padding-bottom: 120px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1px;
+  position: relative;
+  border-top: 1px solid var(--border);
+}
+
+/* Card spans */
+.span3 { grid-column: span 3; min-height: 220px; }
+.span4 { grid-column: span 4; min-height: 240px; }
+.span5 { grid-column: span 5; min-height: 280px; }
+.span6 { grid-column: span 6; min-height: 220px; }
+.span7 { grid-column: span 7; min-height: 300px; }
+
+/* Card */
+.card {
+  position: relative;
+  padding: 40px 32px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.5s ease;
+}
+
+.card:hover {
+  background: var(--surface);
+}
+
+.card:hover .cardNumber {
+  color: #c8956c;
+}
+
+:root:not(.dark) .card:hover .cardNumber {
+  color: #a87040;
+}
+
+.card:hover .cardGeo {
+  opacity: 0.12;
+}
+
+.card:hover .cardName {
+  color: var(--text-primary);
+}
+
+.card:hover .cardDesc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cardNumber {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+  transition: color 0.5s ease;
+  font-family: var(--font-geist-mono), 'Courier New', monospace;
+}
+
+.cardName {
+  font-size: 32px;
+  font-weight: 200;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+  transition: color 0.5s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.cardName[data-large] {
+  font-size: 42px;
+}
+
+.cardNameSub {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+  opacity: 0.6;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-top: 16px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.5s ease;
+  line-height: 1.6;
+  max-width: 280px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Geometric accents ── */
+.cardGeo {
+  position: absolute;
+  opacity: 0.06;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.geoCircle {
+  width: 180px;
+  height: 180px;
+  border: 1px solid var(--text-primary);
+  border-radius: 50%;
+  right: -40px;
+  bottom: -40px;
+}
+
+.geoArc {
+  width: 250px;
+  height: 250px;
+  border: 1px solid var(--text-primary);
+  border-radius: 50%;
+  right: -80px;
+  top: -80px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.geoLine {
+  width: 200px;
+  height: 1px;
+  background: var(--text-primary);
+  right: 32px;
+  bottom: 60px;
+  transform: rotate(-30deg);
+  transform-origin: right center;
+}
+
+.geoCross {
+  width: 100px;
+  height: 100px;
+  right: 40px;
+  top: 40px;
+}
+
+.geoCross::before,
+.geoCross::after {
+  content: '';
+  position: absolute;
+  background: var(--text-primary);
+}
+
+.geoCross::before {
+  width: 100%;
+  height: 1px;
+  top: 50%;
+}
+
+.geoCross::after {
+  width: 1px;
+  height: 100%;
+  left: 50%;
+}
+
+.geoGrid {
+  width: 120px;
+  height: 120px;
+  right: 32px;
+  bottom: 32px;
+  background-image:
+    linear-gradient(var(--text-primary) 1px, transparent 1px),
+    linear-gradient(90deg, var(--text-primary) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.geoDiamond {
+  width: 100px;
+  height: 100px;
+  border: 1px solid var(--text-primary);
+  transform: rotate(45deg);
+  right: 40px;
+  top: 50%;
+  margin-top: -50px;
+}
+
+.geoHalfCircle {
+  width: 200px;
+  height: 100px;
+  border: 1px solid var(--text-primary);
+  border-radius: 200px 200px 0 0;
+  right: -30px;
+  bottom: -10px;
+}
+
+.geoDotRing {
+  width: 150px;
+  height: 150px;
+  right: 30px;
+  top: 30px;
+  border: 1px dashed var(--text-primary);
+  border-radius: 50%;
+}
+
+.geoParallel {
+  width: 180px;
+  height: 1px;
+  background: var(--text-primary);
+  right: 20px;
+  bottom: 50px;
+}
+
+.geoParallel::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: var(--text-primary);
+  bottom: 20px;
+}
+
+.geoParallel::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: var(--text-primary);
+  bottom: 40px;
+}
+
+.geoTriangle {
+  width: 0;
+  height: 0;
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-bottom: 140px solid var(--text-primary);
+  opacity: 0.04;
+  right: 20px;
+  bottom: 20px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .hero {
+    height: calc(100dvh - 56px);
+  }
+
+  .titleOff {
+    font-size: clamp(200px, 60vw, 400px);
+  }
+
+  .titleHours {
+    font-size: clamp(48px, 14vw, 80px);
+    bottom: 72px;
+  }
+
+  .heroMeta {
+    bottom: 72px;
+    max-width: 240px;
+  }
+
+  .heroMetaText {
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .span3 { grid-column: span 3; min-height: 180px; }
+  .span4 { grid-column: span 3; min-height: 180px; }
+  .span5 { grid-column: span 6; min-height: 200px; }
+  .span6 { grid-column: span 6; min-height: 180px; }
+  .span7 { grid-column: span 6; min-height: 220px; }
+
+  .cardName {
+    font-size: 24px;
+  }
+
+  .cardName[data-large] {
+    font-size: 28px;
+  }
+
+  .card {
+    padding: 28px 20px;
+  }
+}

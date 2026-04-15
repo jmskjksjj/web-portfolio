@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off Hero — D: Full Bleed Editorial</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .nav-mock {
+    height: 56px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.06em;
+  }
+
+  .nav-mock span { color: #e5e5e5; }
+
+  .hero {
+    height: calc(100vh - 56px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Huge OFF — takes the whole screen, O bleeds both sides */
+  .mega-off {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(360px, 60vw, 960px);
+    font-weight: 200;
+    letter-spacing: -0.08em;
+    color: #fff;
+    line-height: 0.82;
+    white-space: nowrap;
+    z-index: 2;
+    /* Shift a bit left so first O bleeds more */
+    margin-left: -10vw;
+  }
+
+  /* Second line — "Hours" outline, bleeds right */
+  .mega-hours {
+    position: absolute;
+    bottom: 18%;
+    right: 0;
+    font-size: clamp(140px, 20vw, 320px);
+    font-weight: 200;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px #2a2a2a;
+    line-height: 0.82;
+    white-space: nowrap;
+    z-index: 3;
+    transform: translateX(18%);
+  }
+
+  /* Top label */
+  .hero-label {
+    position: absolute;
+    top: 40px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: #333;
+  }
+
+  /* Top-right index */
+  .hero-index {
+    position: absolute;
+    top: 40px;
+    right: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  .hero-index .small {
+    display: block;
+    color: #333;
+    font-size: 10px;
+    margin-top: 4px;
+    letter-spacing: 0.1em;
+    text-transform: none;
+  }
+
+  /* Centered description inside the huge typography */
+  .hero-desc {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% + clamp(120px, 18vw, 240px)));
+    max-width: 420px;
+    text-align: center;
+    z-index: 4;
+    font-size: 13px;
+    color: #777;
+    font-weight: 300;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-desc .divider {
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: #444;
+    vertical-align: middle;
+    margin: 0 8px 4px;
+  }
+
+  /* Bottom corner — tag */
+  .hero-tag {
+    position: absolute;
+    bottom: 40px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+
+  .hero-tag::before {
+    content: '+ ';
+    color: #c8956c;
+  }
+
+  /* Scroll indicator */
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    right: clamp(32px, 6vw, 80px);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .hero-scroll::after {
+    content: '↓';
+    animation: pulse 2s ease-in-out infinite;
+    font-size: 14px;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(4px); }
+  }
+
+  /* Corner construction marks */
+  .corner-mark {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .corner-mark::before,
+  .corner-mark::after {
+    content: '';
+    position: absolute;
+    background: #333;
+  }
+
+  .corner-mark::before {
+    width: 100%;
+    height: 1px;
+  }
+
+  .corner-mark::after {
+    width: 1px;
+    height: 100%;
+  }
+
+  .corner-tl { top: 80px; left: 32px; }
+  .corner-tr { top: 80px; right: 32px; }
+  .corner-bl { bottom: 80px; left: 32px; }
+  .corner-br { bottom: 80px; right: 32px; }
+
+  @media (max-width: 768px) {
+    .mega-off {
+      font-size: 80vw;
+      margin-left: -15vw;
+    }
+    .mega-hours {
+      font-size: 28vw;
+      bottom: 12%;
+    }
+    .hero-desc { max-width: 240px; font-size: 11px; }
+    .corner-mark { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="nav-mock"><span>SeonJ</span> &nbsp;—&nbsp; on &nbsp;—&nbsp; off</div>
+
+  <section class="hero">
+    <div class="hero-label">CONCEPT D &nbsp;/&nbsp; Full Bleed Editorial</div>
+    <div class="hero-index">
+      010 / INTERESTS
+      <span class="small">2026 — Off Hours</span>
+    </div>
+
+    <div class="corner-mark corner-tl"></div>
+    <div class="corner-mark corner-tr"></div>
+    <div class="corner-mark corner-bl"></div>
+    <div class="corner-mark corner-br"></div>
+
+    <div class="mega-off">Off</div>
+
+    <div class="hero-desc">
+      What I do when I'm not building<span class="divider"></span>일 외의 시간
+    </div>
+
+    <div class="mega-hours">Hours</div>
+
+    <div class="hero-tag">Running · Swimming · Travel</div>
+    <div class="hero-scroll">SCROLL</div>
+  </section>
+</body>
+</html>

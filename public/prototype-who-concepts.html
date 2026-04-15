@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Page — 3 Design Concepts</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --text-primary: #e5e5e5;
+    --text-secondary: #a3a3a3;
+    --text-muted: #525252;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Concept Selector ─── */
+  .concept-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .concept-nav button {
+    flex: 1;
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-family: monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+  }
+  .concept-nav button.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+  }
+  .concept-nav button:hover {
+    color: var(--text-primary);
+  }
+
+  /* ─── Concept Container ─── */
+  .concept { display: none; }
+  .concept.active { display: block; }
+
+  /* ─── Common ─── */
+  .hero-section {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 48px;
+  }
+  .hero-section h1 {
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+  .hero-section .subtitle {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-family: monospace;
+  }
+  .hero-section .oneliner {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    font-weight: 300;
+  }
+
+  .scroll-hint {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: monospace;
+  }
+
+  .hobby-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: monospace;
+    color: var(--text-muted);
+    transition: color 0.6s;
+  }
+  .hobby-label.visible {
+    color: var(--text-secondary);
+  }
+  .hobby-name {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hobby-name.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .formal-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .formal-section h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-family: monospace;
+    margin-bottom: 24px;
+  }
+
+  /* ─── SVG Paths ─── */
+  svg path.draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.05s linear;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* CONCEPT A: Center Spine — 좌우 교차            */
+  /* ═══════════════════════════════════════════════ */
+  .concept-a .line-canvas {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .concept-a .hobby-block {
+    position: relative;
+    height: 200vh;
+  }
+  .concept-a .hobby-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .concept-a .hobby-content {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 40px;
+  }
+  .concept-a .hobby-content.right { flex-direction: row-reverse; }
+  .concept-a .hobby-content.right .hobby-text { text-align: right; }
+
+  .concept-a .hobby-art {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .concept-a .hobby-text {
+    flex: 0 0 200px;
+  }
+
+  .concept-a .spine-svg {
+    position: fixed;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .concept-a .spine-line {
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, var(--text-muted) 20%, var(--text-muted) 80%, transparent 100%);
+    opacity: 0.3;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* CONCEPT B: Left Spine — 한쪽 정렬              */
+  /* ═══════════════════════════════════════════════ */
+  .concept-b .line-canvas {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-left: 80px;
+  }
+  .concept-b .spine-track {
+    position: absolute;
+    left: 80px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+  }
+  .concept-b .spine-track::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--text-muted);
+    opacity: 0.15;
+  }
+  .concept-b .spine-drawn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 0%;
+    background: var(--text-primary);
+    opacity: 0.4;
+    transition: height 0.1s linear;
+  }
+
+  .concept-b .hobby-block {
+    position: relative;
+    height: 200vh;
+    padding-left: 60px;
+  }
+  .concept-b .hobby-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .concept-b .hobby-inner {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .concept-b .hobby-art { flex: 0 0 300px; }
+  .concept-b .hobby-text { flex: 1; }
+
+  .concept-b .node-dot {
+    position: absolute;
+    left: -64px;
+    top: 50vh;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transform: translate(-50%, -50%);
+    transition: all 0.6s;
+  }
+  .concept-b .node-dot.active {
+    background: var(--text-primary);
+    box-shadow: 0 0 12px rgba(229,229,229,0.3);
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* CONCEPT C: Flow Wave — 연속 흐름선             */
+  /* ═══════════════════════════════════════════════ */
+  .concept-c .flow-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .concept-c .flow-svg-wrapper {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .concept-c .flow-svg-wrapper svg {
+    width: 100%;
+    height: 100%;
+  }
+  .concept-c .hobby-block {
+    position: relative;
+    height: 250vh;
+    z-index: 2;
+  }
+  .concept-c .hobby-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+  }
+  .concept-c .hobby-art-inline {
+    margin-bottom: 30px;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* Concept Description Banner                      */
+  /* ═══════════════════════════════════════════════ */
+  .concept-desc {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+    text-align: center;
+  }
+  .concept-desc h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  .concept-desc p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ Concept Nav ═══ -->
+<nav class="concept-nav">
+  <button class="active" onclick="showConcept('a')">A — Center Spine</button>
+  <button onclick="showConcept('b')">B — Left Timeline</button>
+  <button onclick="showConcept('c')">C — Flow Wave</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- CONCEPT A: Center Spine — 좌우 교차                        -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="concept-a" class="concept active">
+
+  <div class="hero-section">
+    <h1>Kim Seon Jae</h1>
+    <div class="subtitle">AI Systems Architect</div>
+    <div class="oneliner">I automate the architecture industry with AI.</div>
+  </div>
+
+  <div class="concept-desc">
+    <h3>Concept A: Center Spine</h3>
+    <p>페이지 중앙을 관통하는 세로 줄기선. 취미 일러스트가 좌/우로 교차 배치되며 스크롤에 따라 한 줄 한 줄 그려짐.</p>
+  </div>
+
+  <div class="scroll-hint">↓ scroll to draw ↓</div>
+
+  <div class="line-canvas">
+    <!-- Spine -->
+    <div class="spine-svg"><div class="spine-line"></div></div>
+
+    <!-- Running -->
+    <div class="hobby-block" data-hobby="a-running">
+      <div class="hobby-sticky">
+        <div class="hobby-content left">
+          <div class="hobby-art">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+              <path class="draw" d="M 0 180 C 50 180, 60 160, 80 140 C 100 120, 90 100, 110 90 C 130 80, 120 60, 140 50 L 145 45 M 140 50 L 130 48 M 110 90 L 100 110 M 110 90 L 130 105 M 140 50 C 160 40, 180 60, 200 50 C 220 40, 240 50, 260 30 C 280 10, 290 20, 300 10"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">01</div>
+            <div class="hobby-name" style="margin-top:8px">Running</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              새벽 런닝. 생각을 정리하는 시간.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Swimming -->
+    <div class="hobby-block" data-hobby="a-swimming">
+      <div class="hobby-sticky">
+        <div class="hobby-content right">
+          <div class="hobby-art">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+              <path class="draw" d="M 0 100 C 20 80, 40 80, 50 100 C 60 120, 80 120, 90 100 C 100 80, 120 80, 130 100 C 140 120, 160 120, 170 100 C 180 80, 200 80, 210 100 C 220 120, 240 120, 250 100 C 260 80, 280 80, 300 100 M 100 98 L 90 80 L 105 75 L 115 65 M 105 75 C 120 85, 130 80, 140 75 M 90 80 L 80 90"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">02</div>
+            <div class="hobby-name" style="margin-top:8px">Swimming</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              물속에서는 모든 게 고요해진다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fishing -->
+    <div class="hobby-block" data-hobby="a-fishing">
+      <div class="hobby-sticky">
+        <div class="hobby-content left">
+          <div class="hobby-art">
+            <svg width="300" height="220" viewBox="0 0 300 220" fill="none">
+              <path class="draw" d="M 40 200 L 40 160 L 45 145 L 40 140 L 35 145 L 40 160 M 40 140 L 38 130 L 42 120 M 42 120 L 42 80 L 200 20 M 200 20 C 210 25, 205 35, 200 30 M 200 20 L 200 40 C 200 60, 210 80, 200 100 C 190 120, 195 140, 200 160 M 200 160 C 202 165, 198 170, 195 168 M 0 200 C 50 195, 100 200, 150 198 C 200 196, 250 200, 300 198"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">03</div>
+            <div class="hobby-name" style="margin-top:8px">Fishing</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              기다림의 미학.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="formal-section">
+    <h2>Awards</h2>
+    <p style="color:var(--text-secondary); font-size:14px; font-weight:300">포멀 섹션은 기존 스타일 유지...</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- CONCEPT B: Left Timeline — 왼쪽 타임라인                    -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="concept-b" class="concept">
+
+  <div class="hero-section">
+    <h1>Kim Seon Jae</h1>
+    <div class="subtitle">AI Systems Architect</div>
+    <div class="oneliner">I automate the architecture industry with AI.</div>
+  </div>
+
+  <div class="concept-desc">
+    <h3>Concept B: Left Timeline</h3>
+    <p>왼쪽에 세로 타임라인이 진행되며 각 취미에서 노드가 활성화. 일러스트는 오른쪽으로 전개.</p>
+  </div>
+
+  <div class="scroll-hint">↓ scroll to draw ↓</div>
+
+  <div class="line-canvas">
+    <div class="spine-track">
+      <div class="spine-drawn" id="spine-b-drawn"></div>
+    </div>
+
+    <!-- Running -->
+    <div class="hobby-block" data-hobby="b-running">
+      <div class="node-dot" id="node-b-1"></div>
+      <div class="hobby-sticky">
+        <div class="hobby-inner">
+          <div class="hobby-art">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+              <path class="draw" d="M 0 180 C 30 170, 40 150, 60 130 C 80 110, 70 90, 90 80 L 95 75 M 90 80 L 82 78 M 90 80 L 80 100 M 90 80 L 108 92 M 95 75 C 105 70, 100 55, 110 50 M 110 50 C 140 35, 170 50, 200 35 C 230 20, 260 30, 300 15"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">Running</div>
+            <div class="hobby-name" style="margin-top:8px">새벽 런닝</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              생각을 정리하는 시간. 매일 아침 5km.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Swimming -->
+    <div class="hobby-block" data-hobby="b-swimming">
+      <div class="node-dot" id="node-b-2"></div>
+      <div class="hobby-sticky">
+        <div class="hobby-inner">
+          <div class="hobby-art">
+            <svg width="300" height="200" viewBox="0 0 300 200" fill="none">
+              <path class="draw" d="M 0 110 C 25 85, 50 85, 65 110 C 80 135, 105 135, 120 110 C 135 85, 160 85, 175 110 C 190 135, 215 135, 230 110 C 245 85, 270 85, 300 110 M 80 108 L 72 88 L 86 83 L 94 72 M 86 83 C 100 92, 110 88, 118 82 M 72 88 L 64 98"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">Swimming</div>
+            <div class="hobby-name" style="margin-top:8px">수영</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              물속에서는 모든 게 고요해진다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fishing -->
+    <div class="hobby-block" data-hobby="b-fishing">
+      <div class="node-dot" id="node-b-3"></div>
+      <div class="hobby-sticky">
+        <div class="hobby-inner">
+          <div class="hobby-art">
+            <svg width="300" height="220" viewBox="0 0 300 220" fill="none">
+              <path class="draw" d="M 30 200 L 30 165 L 35 148 L 30 142 L 25 148 L 30 165 M 30 142 L 28 130 L 32 118 M 32 118 L 32 80 L 220 15 M 220 15 C 228 20, 224 30, 220 25 M 220 15 L 220 38 C 220 60, 228 82, 220 105 C 212 128, 216 150, 220 172 M 220 172 C 222 178, 217 182, 214 180 M 0 200 C 60 194, 120 200, 180 197 C 240 194, 270 200, 300 197"
+                stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" pathLength="1"/>
+            </svg>
+          </div>
+          <div class="hobby-text">
+            <div class="hobby-label">Fishing</div>
+            <div class="hobby-name" style="margin-top:8px">낚시</div>
+            <p style="margin-top:12px; font-size:13px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+              기다림의 미학. 바다낚시 선호.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="formal-section">
+    <h2>Awards</h2>
+    <p style="color:var(--text-secondary); font-size:14px; font-weight:300">포멀 섹션은 기존 스타일 유지...</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- CONCEPT C: Flow Wave — 중앙 집중 풀스크린                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="concept-c" class="concept">
+
+  <div class="hero-section">
+    <h1>Kim Seon Jae</h1>
+    <div class="subtitle">AI Systems Architect</div>
+    <div class="oneliner">I automate the architecture industry with AI.</div>
+  </div>
+
+  <div class="concept-desc">
+    <h3>Concept C: Flow Wave</h3>
+    <p>하나의 연속 흐름선이 뷰포트 전체를 가로지르며 각 취미 장면을 풀스크린으로 보여줌. 일러스트가 화면 중앙에 크게 그려짐.</p>
+  </div>
+
+  <div class="scroll-hint">↓ scroll to draw ↓</div>
+
+  <!-- Fixed flow line -->
+  <div class="flow-svg-wrapper" id="flow-svg-c">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" fill="none">
+      <path class="draw" id="flow-line-c"
+        d="M 50 0 C 50 5, 50 10, 50 15 C 50 20, 45 25, 40 30 C 35 35, 50 40, 55 45 C 60 50, 50 55, 45 60 C 40 65, 50 70, 55 75 C 60 80, 50 85, 50 90 C 50 95, 50 98, 50 100"
+        stroke="var(--text-muted)" stroke-width="0.15" stroke-linecap="round" pathLength="1" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <div class="flow-container">
+    <!-- Running -->
+    <div class="hobby-block" data-hobby="c-running">
+      <div class="hobby-sticky">
+        <div class="hobby-art-inline">
+          <svg width="400" height="250" viewBox="0 0 400 250" fill="none">
+            <path class="draw" d="M 0 230 C 40 225, 60 210, 90 185 C 120 160, 110 135, 140 120 C 155 112, 148 95, 165 85 L 170 80 M 165 85 L 155 83 M 165 85 L 152 108 M 165 85 L 185 100 M 170 80 C 185 72, 178 55, 195 45 M 195 45 C 230 28, 270 45, 310 28 C 340 15, 370 22, 400 10"
+              stroke="var(--text-primary)" stroke-width="2.5" stroke-linecap="round" pathLength="1"/>
+          </svg>
+        </div>
+        <div class="hobby-label">01</div>
+        <div class="hobby-name" style="margin-top:8px; font-size:36px">Running</div>
+        <p style="margin-top:16px; font-size:14px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+          새벽 런닝. 생각을 정리하는 시간.
+        </p>
+      </div>
+    </div>
+
+    <!-- Swimming -->
+    <div class="hobby-block" data-hobby="c-swimming">
+      <div class="hobby-sticky">
+        <div class="hobby-art-inline">
+          <svg width="450" height="220" viewBox="0 0 450 220" fill="none">
+            <path class="draw" d="M 0 120 C 30 90, 65 90, 85 120 C 105 150, 140 150, 160 120 C 180 90, 215 90, 235 120 C 255 150, 290 150, 310 120 C 330 90, 365 90, 385 120 C 400 142, 430 142, 450 120 M 120 118 L 108 92 L 128 86 L 138 72 M 128 86 C 148 98, 160 92, 172 85 M 108 92 L 96 104"
+              stroke="var(--text-primary)" stroke-width="2.5" stroke-linecap="round" pathLength="1"/>
+          </svg>
+        </div>
+        <div class="hobby-label">02</div>
+        <div class="hobby-name" style="margin-top:8px; font-size:36px">Swimming</div>
+        <p style="margin-top:16px; font-size:14px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+          물속에서는 모든 게 고요해진다.
+        </p>
+      </div>
+    </div>
+
+    <!-- Fishing -->
+    <div class="hobby-block" data-hobby="c-fishing">
+      <div class="hobby-sticky">
+        <div class="hobby-art-inline">
+          <svg width="400" height="280" viewBox="0 0 400 280" fill="none">
+            <path class="draw" d="M 60 260 L 60 215 L 66 195 L 60 188 L 54 195 L 60 215 M 60 188 L 57 175 L 62 160 M 62 160 L 62 115 L 280 30 M 280 30 C 290 36, 285 48, 280 42 M 280 30 L 280 55 C 280 80, 290 105, 280 135 C 270 165, 275 195, 280 225 M 280 225 C 283 232, 277 238, 273 235 M 0 260 C 80 252, 160 260, 240 256 C 320 252, 360 260, 400 256"
+              stroke="var(--text-primary)" stroke-width="2.5" stroke-linecap="round" pathLength="1"/>
+          </svg>
+        </div>
+        <div class="hobby-label">03</div>
+        <div class="hobby-name" style="margin-top:8px; font-size:36px">Fishing</div>
+        <p style="margin-top:16px; font-size:14px; color:var(--text-secondary); font-weight:300; opacity:0; transition: opacity 0.8s 0.3s" class="hobby-desc">
+          기다림의 미학.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="formal-section">
+    <h2>Awards</h2>
+    <p style="color:var(--text-secondary); font-size:14px; font-weight:300">포멀 섹션은 기존 스타일 유지...</p>
+  </div>
+</div>
+
+<script>
+// ─── Concept Switching ───
+function showConcept(id) {
+  document.querySelectorAll('.concept').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.concept-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('concept-' + id).classList.add('active');
+  document.querySelectorAll('.concept-nav button')[
+    id === 'a' ? 0 : id === 'b' ? 1 : 2
+  ].classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── Scroll-Linked Path Drawing ───
+function updateDrawing() {
+  const activeConcept = document.querySelector('.concept.active');
+  if (!activeConcept) return;
+
+  const hobbyBlocks = activeConcept.querySelectorAll('.hobby-block');
+
+  hobbyBlocks.forEach(block => {
+    const rect = block.getBoundingClientRect();
+    const blockH = block.offsetHeight;
+    const vh = window.innerHeight;
+
+    // Progress: 0 when block top hits viewport bottom, 1 when block bottom hits viewport top
+    const rawProgress = 1 - (rect.bottom / (blockH + vh));
+    const progress = Math.max(0, Math.min(1, rawProgress));
+
+    // Map to drawing: start at 10%, complete at 60%
+    const drawProgress = Math.max(0, Math.min(1, (progress - 0.1) / 0.5));
+
+    // Apply to SVG path
+    const path = block.querySelector('path.draw');
+    if (path) {
+      path.style.strokeDashoffset = 1 - drawProgress;
+    }
+
+    // Show text when drawing > 50%
+    const name = block.querySelector('.hobby-name');
+    const label = block.querySelector('.hobby-label');
+    const desc = block.querySelector('.hobby-desc');
+    if (name) {
+      if (drawProgress > 0.5) {
+        name.classList.add('visible');
+        if (label) label.classList.add('visible');
+        if (desc) desc.style.opacity = '1';
+      } else {
+        name.classList.remove('visible');
+        if (label) label.classList.remove('visible');
+        if (desc) desc.style.opacity = '0';
+      }
+    }
+  });
+
+  // Concept B: spine progress
+  const spineDrawn = document.getElementById('spine-b-drawn');
+  if (spineDrawn && activeConcept.id === 'concept-b') {
+    const canvas = activeConcept.querySelector('.line-canvas');
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasH = canvas.offsetHeight;
+      const scrolled = -canvasRect.top;
+      const spineProgress = Math.max(0, Math.min(100, (scrolled / canvasH) * 100));
+      spineDrawn.style.height = spineProgress + '%';
+    }
+
+    // Node dots
+    hobbyBlocks.forEach((block, i) => {
+      const rect = block.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const dot = document.getElementById('node-b-' + (i + 1));
+      if (dot) {
+        if (center < window.innerHeight * 0.6 && center > window.innerHeight * 0.2) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      }
+    });
+  }
+
+  // Concept C: flow line
+  const flowLine = document.getElementById('flow-line-c');
+  if (flowLine && activeConcept.id === 'concept-c') {
+    const container = activeConcept.querySelector('.flow-container');
+    if (container) {
+      const cRect = container.getBoundingClientRect();
+      const cH = container.offsetHeight;
+      const scrolled = -cRect.top;
+      const flowProgress = Math.max(0, Math.min(1, scrolled / cH));
+      flowLine.style.strokeDashoffset = 1 - flowProgress;
+    }
+  }
+
+  requestAnimationFrame(updateDrawing);
+}
+
+requestAnimationFrame(updateDrawing);
+</script>
+</body>
+</html>

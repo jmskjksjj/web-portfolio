@@ -25,13 +25,14 @@ export default function Home() {
   const [heroReady, setHeroReady] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem("splashShown")) {
+    // Persistent across sessions — splash only shows on the very first visit ever.
+    if (localStorage.getItem("splashShown")) {
       setShowSplash(false);
     }
   }, []);
 
   const handleHeroReady = () => {
-    sessionStorage.setItem("splashShown", "1");
+    localStorage.setItem("splashShown", "1");
     setHeroReady(true);
   };
 

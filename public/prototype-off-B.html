@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off — Concept B: Bento Grid</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 56px 0 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 120px;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 40px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(160px, auto);
+    gap: 1px;
+    background: #1e1e1e;
+    border: 1px solid #1e1e1e;
+  }
+
+  .cell {
+    background: #0a0a0a;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: default;
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cell:hover {
+    background: #111;
+  }
+
+  .cell:hover .cell-name {
+    color: #fff;
+  }
+
+  .cell:hover .cell-number {
+    opacity: 1;
+  }
+
+  .cell:hover .cell-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Varied sizes */
+  .cell.wide { grid-column: span 2; }
+  .cell.tall { grid-row: span 2; }
+
+  .cell-number {
+    font-size: 10px;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .cell-name {
+    font-size: 22px;
+    font-weight: 300;
+    color: #aaa;
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease;
+  }
+
+  .cell-desc {
+    font-size: 12px;
+    color: #555;
+    margin-top: 6px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: all 0.3s ease;
+  }
+
+  .cell.wide .cell-name { font-size: 28px; }
+  .cell.tall .cell-name { font-size: 26px; }
+  .cell.tall.wide .cell-name { font-size: 36px; font-weight: 300; }
+
+  .cell.tall {
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-label">Hobbies & Interests</div>
+    <div class="grid">
+      <div class="cell wide">
+        <span class="cell-number">01</span>
+        <span class="cell-name">Running</span>
+        <span class="cell-desc">Clear mind, one stride at a time</span>
+      </div>
+      <div class="cell">
+        <span class="cell-number">02</span>
+        <span class="cell-name">Swimming</span>
+        <span class="cell-desc">Weightless reset</span>
+      </div>
+      <div class="cell tall">
+        <span class="cell-number">03</span>
+        <span class="cell-name">Cycling</span>
+        <span class="cell-desc">Exploring distances on two wheels</span>
+      </div>
+      <div class="cell">
+        <span class="cell-number">04</span>
+        <span class="cell-name">Cooking</span>
+        <span class="cell-desc">Building flavors</span>
+      </div>
+      <div class="cell wide">
+        <span class="cell-number">05</span>
+        <span class="cell-name">Board Games</span>
+        <span class="cell-desc">Strategy, bluff, and good company</span>
+      </div>
+      <div class="cell">
+        <span class="cell-number">06</span>
+        <span class="cell-name">Poker</span>
+        <span class="cell-desc">Reading patterns</span>
+      </div>
+      <div class="cell tall">
+        <span class="cell-number">07</span>
+        <span class="cell-name">Soccer</span>
+        <span class="cell-desc">Team rhythm on the pitch</span>
+      </div>
+      <div class="cell">
+        <span class="cell-number">08</span>
+        <span class="cell-name">Fishing</span>
+        <span class="cell-desc">Patience by the water</span>
+      </div>
+      <div class="cell wide">
+        <span class="cell-number">09</span>
+        <span class="cell-name">Travel</span>
+        <span class="cell-desc">Collecting perspectives, not things</span>
+      </div>
+      <div class="cell">
+        <span class="cell-number">10</span>
+        <span class="cell-name">Camping</span>
+        <span class="cell-desc">Simplicity under open skies</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

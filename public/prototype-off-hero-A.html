@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off Hero — A: Left Bleed</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .nav-mock {
+    height: 56px;
+    border-bottom: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.06em;
+  }
+
+  .nav-mock span { color: #e5e5e5; }
+
+  /* Hero */
+  .hero {
+    height: calc(100vh - 56px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: clamp(155px, 19vh, 245px);
+    box-sizing: border-box;
+  }
+
+  /* Giant OFF — O bleeds left */
+  .title-wrap {
+    position: relative;
+    width: 100%;
+    line-height: 0.82;
+  }
+
+  .title-off {
+    font-size: clamp(280px, 42vw, 640px);
+    font-weight: 200;
+    letter-spacing: -0.06em;
+    color: #ffffff;
+    position: relative;
+    white-space: nowrap;
+    /* Translate left so first letter (O) is half cut */
+    transform: translateX(-10vw);
+    z-index: 2;
+  }
+
+  .title-hours {
+    position: absolute;
+    bottom: 80px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: clamp(72px, 9vw, 140px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: transparent;
+    -webkit-text-stroke: 1px #333;
+    line-height: 1;
+    z-index: 3;
+  }
+
+  /* Top label */
+  .hero-label {
+    position: absolute;
+    top: 40px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #555;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: #333;
+  }
+
+  /* Bottom-right meta block — above the footer line */
+  .hero-meta {
+    position: absolute;
+    bottom: 80px;
+    right: clamp(32px, 6vw, 80px);
+    text-align: right;
+    z-index: 3;
+  }
+
+  .hero-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #444;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 12px;
+  }
+
+  .hero-meta-text {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.7;
+    font-weight: 300;
+    white-space: nowrap;
+  }
+
+  /* Bottom line + index */
+  .hero-footer {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #444;
+    font-family: 'Courier New', monospace;
+  }
+
+  .hero-footer-line {
+    flex: 1;
+    height: 1px;
+    background: #1a1a1a;
+    margin: 0 20px;
+  }
+
+  /* Arrow */
+  .hero-arrow {
+    font-size: 14px;
+    color: #555;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(4px); }
+  }
+
+  @media (max-width: 768px) {
+    .title-off {
+      font-size: clamp(200px, 60vw, 400px);
+    }
+    .title-hours { font-size: clamp(48px, 14vw, 80px); bottom: 72px; }
+    .hero-meta { bottom: 72px; max-width: 240px; }
+    .hero-meta-text { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+  <div class="nav-mock"><span>SeonJ</span> &nbsp;—&nbsp; on &nbsp;—&nbsp; off</div>
+
+  <section class="hero">
+    <div class="hero-label">CONCEPT A &nbsp;/&nbsp; Left Bleed</div>
+
+    <div class="title-wrap">
+      <div class="title-off">Off</div>
+    </div>
+
+    <div class="title-hours">Hours</div>
+
+    <div class="hero-meta">
+      <div class="hero-meta-label">— N°10 / Interests</div>
+      <div class="hero-meta-text">Trying every thing in this world I want to try. That's the only finish line.</div>
+    </div>
+
+    <div class="hero-footer">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="hero-footer-line"></div>
+      <span class="hero-arrow">↓</span>
+    </div>
+  </section>
+</body>
+</html>

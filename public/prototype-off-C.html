@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off — Concept C: Blueprint</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 56px 0 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 24px 120px;
+    position: relative;
+  }
+
+  .header-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 48px;
+    font-family: 'Courier New', monospace;
+  }
+
+  .blueprint {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+  }
+
+  /* Grid lines */
+  .blueprint::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(#1a1a1a 1px, transparent 1px),
+      linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.6;
+  }
+
+  /* Subtle cross marks at intersections */
+  .blueprint::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, #222 1px, transparent 1px);
+    background-size: 80px 80px;
+    background-position: 0 0;
+  }
+
+  .node {
+    position: absolute;
+    cursor: default;
+    transition: all 0.3s ease;
+  }
+
+  .node:hover .node-name {
+    color: #fff;
+  }
+
+  .node:hover .node-dot {
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.3);
+  }
+
+  .node:hover .node-line {
+    border-color: #444;
+  }
+
+  .node:hover .node-desc {
+    opacity: 1;
+  }
+
+  .node-dot {
+    width: 5px;
+    height: 5px;
+    background: #555;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    position: absolute;
+  }
+
+  .node-label {
+    position: absolute;
+    white-space: nowrap;
+  }
+
+  .node-number {
+    font-size: 9px;
+    color: #333;
+    font-family: 'Courier New', monospace;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .node-name {
+    font-size: 18px;
+    font-weight: 300;
+    color: #999;
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease;
+  }
+
+  .node-desc {
+    font-size: 11px;
+    color: #444;
+    margin-top: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .node-line {
+    position: absolute;
+    border-left: 1px solid #2a2a2a;
+    border-bottom: 1px solid #2a2a2a;
+    transition: border-color 0.3s ease;
+  }
+
+  /* Connector lines between related hobbies */
+  .connector {
+    position: absolute;
+    border-top: 1px dashed #1a1a1a;
+    z-index: 0;
+  }
+
+  /* Dimension markers */
+  .dimension {
+    position: absolute;
+    font-size: 9px;
+    color: #252525;
+    font-family: 'Courier New', monospace;
+  }
+
+  .dimension.bottom {
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .dimension.right {
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  /* Node positions — scattered like architectural annotations */
+  .n1 { left: 8%; top: 12%; }
+  .n1 .node-dot { top: 0; left: 0; }
+  .n1 .node-line { top: 5px; left: 5px; width: 24px; height: 20px; }
+  .n1 .node-label { top: 24px; left: 28px; }
+
+  .n2 { left: 35%; top: 8%; }
+  .n2 .node-dot { top: 0; left: 0; }
+  .n2 .node-line { top: 5px; left: 5px; width: 16px; height: 20px; }
+  .n2 .node-label { top: 24px; left: 20px; }
+
+  .n3 { left: 62%; top: 5%; }
+  .n3 .node-dot { top: 0; left: 0; }
+  .n3 .node-line { top: 5px; left: 5px; width: 20px; height: 18px; }
+  .n3 .node-label { top: 22px; left: 24px; }
+
+  .n4 { left: 12%; top: 42%; }
+  .n4 .node-dot { top: 0; left: 0; }
+  .n4 .node-line { top: 5px; left: 5px; width: 28px; height: 16px; }
+  .n4 .node-label { top: 20px; left: 32px; }
+
+  .n5 { left: 42%; top: 35%; }
+  .n5 .node-dot { top: 0; left: 0; }
+  .n5 .node-line { top: 5px; left: 5px; width: 14px; height: 22px; }
+  .n5 .node-label { top: 26px; left: 18px; }
+
+  .n6 { left: 72%; top: 30%; }
+  .n6 .node-dot { top: 0; left: 0; }
+  .n6 .node-line { top: 5px; left: 5px; width: 22px; height: 18px; }
+  .n6 .node-label { top: 22px; left: 26px; }
+
+  .n7 { left: 6%; top: 72%; }
+  .n7 .node-dot { top: 0; left: 0; }
+  .n7 .node-line { top: 5px; left: 5px; width: 18px; height: 20px; }
+  .n7 .node-label { top: 24px; left: 22px; }
+
+  .n8 { left: 32%; top: 68%; }
+  .n8 .node-dot { top: 0; left: 0; }
+  .n8 .node-line { top: 5px; left: 5px; width: 20px; height: 16px; }
+  .n8 .node-label { top: 20px; left: 24px; }
+
+  .n9 { left: 58%; top: 62%; }
+  .n9 .node-dot { top: 0; left: 0; }
+  .n9 .node-line { top: 5px; left: 5px; width: 16px; height: 22px; }
+  .n9 .node-label { top: 26px; left: 20px; }
+
+  .n10 { left: 78%; top: 70%; }
+  .n10 .node-dot { top: 0; left: 0; }
+  .n10 .node-line { top: 5px; left: 5px; width: 24px; height: 18px; }
+  .n10 .node-label { top: 22px; left: 28px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-label">Hobbies & Interests</div>
+    <div class="blueprint">
+      <span class="dimension bottom">1 : life</span>
+      <span class="dimension right">off-hours</span>
+
+      <div class="node n1">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">01</span>
+          <span class="node-name">Running</span>
+          <span class="node-desc">Clear mind, one stride at a time</span>
+        </div>
+      </div>
+
+      <div class="node n2">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">02</span>
+          <span class="node-name">Swimming</span>
+          <span class="node-desc">Weightless reset in the water</span>
+        </div>
+      </div>
+
+      <div class="node n3">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">03</span>
+          <span class="node-name">Cycling</span>
+          <span class="node-desc">Exploring distances on two wheels</span>
+        </div>
+      </div>
+
+      <div class="node n4">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">04</span>
+          <span class="node-name">Cooking</span>
+          <span class="node-desc">Building flavors from scratch</span>
+        </div>
+      </div>
+
+      <div class="node n5">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">05</span>
+          <span class="node-name">Board Games</span>
+          <span class="node-desc">Strategy, bluff, and good company</span>
+        </div>
+      </div>
+
+      <div class="node n6">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">06</span>
+          <span class="node-name">Poker</span>
+          <span class="node-desc">Reading patterns beyond the cards</span>
+        </div>
+      </div>
+
+      <div class="node n7">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">07</span>
+          <span class="node-name">Soccer</span>
+          <span class="node-desc">Team rhythm on the pitch</span>
+        </div>
+      </div>
+
+      <div class="node n8">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">08</span>
+          <span class="node-name">Fishing</span>
+          <span class="node-desc">Patience rewarded by the water</span>
+        </div>
+      </div>
+
+      <div class="node n9">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">09</span>
+          <span class="node-name">Travel</span>
+          <span class="node-desc">Collecting perspectives, not things</span>
+        </div>
+      </div>
+
+      <div class="node n10">
+        <div class="node-dot"></div>
+        <div class="node-line"></div>
+        <div class="node-label">
+          <span class="node-number">10</span>
+          <span class="node-name">Camping</span>
+          <span class="node-desc">Simplicity under open skies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

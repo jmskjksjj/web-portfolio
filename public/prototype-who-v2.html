@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Page — One Line Journey</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    color: #e5e5e5;
+    overflow-x: hidden;
+    font-family: system-ui, sans-serif;
+  }
+
+  /* Scroll container — very tall to give enough scroll runway */
+  .scroll-spacer {
+    height: 8000px;
+    position: relative;
+  }
+
+  /* Fixed viewport for the SVG scene */
+  .scene {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .scene svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #525252;
+    font-family: monospace;
+    z-index: 10;
+    transition: opacity 0.5s;
+  }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <svg id="mainSvg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <!-- Water pattern for pool/sea -->
+      <pattern id="waves" x="0" y="0" width="20" height="8" patternUnits="userSpaceOnUse">
+        <path d="M 0 4 C 5 2, 10 6, 20 4" stroke="#1a3a4a" stroke-width="0.5" fill="none" opacity="0.5"/>
+      </pattern>
+    </defs>
+
+    <!-- ═══ THE ONE CONTINUOUS LINE (landscape/path) ═══ -->
+    <!-- This is the single continuous path the character walks along -->
+    <path id="mainPath"
+      d="M -50 400
+         L 100 400
+         C 130 400, 140 390, 150 380
+         L 200 340
+         C 210 332, 220 330, 230 330
+         L 300 330
+
+         C 320 330, 330 330, 340 340
+         C 350 350, 360 360, 370 360
+         C 380 360, 390 355, 395 345
+         C 400 335, 405 325, 410 320
+         C 415 315, 425 315, 430 320
+         C 435 325, 440 335, 445 345
+         C 450 355, 460 360, 470 360
+         C 480 360, 490 350, 500 340
+         C 510 330, 520 330, 540 330
+
+         L 600 330
+         C 620 330, 630 335, 640 345
+         L 650 360
+         C 655 368, 660 372, 665 372
+         L 670 372
+         C 672 372, 674 374, 674 380
+         L 674 420
+         C 674 425, 672 428, 668 428
+         L 620 428
+         C 616 428, 614 425, 614 420
+         L 614 380
+         C 614 376, 616 372, 620 372
+         L 640 372
+
+         M 620 372
+         L 620 420
+
+         M 668 372
+         L 668 420
+
+         M 640 428
+         C 650 428, 660 430, 670 435
+         L 750 470
+         C 770 478, 790 480, 810 480
+         L 900 480
+
+         C 920 480, 930 478, 935 472
+         L 940 465
+         C 942 462, 945 460, 950 460
+         L 960 460
+         "
+      stroke="#e5e5e5" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+
+    <!-- ═══ SCENERY DETAILS (drawn with the line) ═══ -->
+
+    <!-- Running track oval (around 370-500, 300-380) -->
+    <ellipse cx="435" cy="345" rx="70" ry="22" stroke="#e5e5e5" stroke-width="0.8" fill="none" opacity="0.2" stroke-dasharray="4 3"/>
+
+    <!-- Pool water fill -->
+    <rect x="616" y="374" width="56" height="52" fill="#0d2233" opacity="0.5" rx="2"/>
+    <!-- Pool lane lines -->
+    <line x1="630" y1="374" x2="630" y2="426" stroke="#1a3a5a" stroke-width="0.5" opacity="0.4" stroke-dasharray="3 3"/>
+    <line x1="644" y1="374" x2="644" y2="426" stroke="#1a3a5a" stroke-width="0.5" opacity="0.4" stroke-dasharray="3 3"/>
+    <line x1="658" y1="374" x2="658" y2="426" stroke="#1a3a5a" stroke-width="0.5" opacity="0.4" stroke-dasharray="3 3"/>
+    <!-- Diving board -->
+    <line x1="648" y1="360" x2="648" y2="372" stroke="#e5e5e5" stroke-width="1" opacity="0.4"/>
+    <line x1="642" y1="360" x2="660" y2="360" stroke="#e5e5e5" stroke-width="1.2" opacity="0.4"/>
+
+    <!-- Sea/water area -->
+    <path d="M 750 480 C 770 475, 790 478, 810 473 C 830 468, 850 472, 870 467 C 890 462, 910 466, 930 461 L 960 460 L 960 520 L 750 520 Z" fill="#0d2233" opacity="0.3"/>
+    <!-- Waves on water -->
+    <path d="M 760 490 C 775 486, 790 492, 805 488" stroke="#1a3a5a" stroke-width="0.6" fill="none" opacity="0.4"/>
+    <path d="M 820 485 C 835 481, 850 487, 865 483" stroke="#1a3a5a" stroke-width="0.6" fill="none" opacity="0.4"/>
+    <path d="M 790 500 C 805 496, 820 502, 835 498" stroke="#1a3a5a" stroke-width="0.6" fill="none" opacity="0.4"/>
+    <path d="M 850 495 C 865 491, 880 497, 895 493" stroke="#1a3a5a" stroke-width="0.6" fill="none" opacity="0.4"/>
+
+    <!-- Fishing rod (appears when character reaches fishing spot) -->
+    <g id="fishingRod" opacity="0">
+      <line x1="950" y1="460" x2="950" y2="410" stroke="#e5e5e5" stroke-width="1" opacity="0.6"/>
+      <line x1="950" y1="410" x2="990" y2="395" stroke="#e5e5e5" stroke-width="0.8" opacity="0.6"/>
+      <path id="fishingLine" d="M 990 395 C 990 420, 985 450, 980 470 C 978 478, 975 482, 972 485" stroke="#e5e5e5" stroke-width="0.5" fill="none" opacity="0.4"/>
+    </g>
+
+    <!-- ═══ FISH (hidden, appears during fishing) ═══ -->
+    <g id="fishCatch" opacity="0" transform="translate(972, 485)">
+      <path d="M 0 0 C 3 -2, 8 -3, 12 0 C 8 3, 3 2, 0 0 M 12 0 L 16 -3 L 16 3 Z" fill="#e5e5e5" stroke="none" opacity="0.7"/>
+    </g>
+
+    <!-- ═══ SPLASH (hidden, appears during diving) ═══ -->
+    <g id="splash" opacity="0">
+      <circle cx="644" cy="374" r="3" fill="none" stroke="#4a7a9a" stroke-width="0.8"/>
+      <circle cx="644" cy="374" r="6" fill="none" stroke="#4a7a9a" stroke-width="0.5"/>
+    </g>
+
+    <!-- ═══ THE CHARACTER ═══ -->
+    <g id="character" transform="translate(0, 400)">
+      <!-- Head -->
+      <circle cx="0" cy="-12" r="3" fill="none" stroke="#e5e5e5" stroke-width="1.2"/>
+      <!-- Body -->
+      <line x1="0" y1="-9" x2="0" y2="0" stroke="#e5e5e5" stroke-width="1.2"/>
+      <!-- Legs -->
+      <line id="legL" x1="0" y1="0" x2="-3" y2="6" stroke="#e5e5e5" stroke-width="1.2"/>
+      <line id="legR" x1="0" y1="0" x2="3" y2="6" stroke="#e5e5e5" stroke-width="1.2"/>
+      <!-- Arms -->
+      <line id="armL" x1="0" y1="-6" x2="-4" y2="-2" stroke="#e5e5e5" stroke-width="1.2"/>
+      <line id="armR" x1="0" y1="-6" x2="4" y2="-2" stroke="#e5e5e5" stroke-width="1.2"/>
+    </g>
+
+    <!-- ═══ ZONE LABELS (very subtle, appear briefly) ═══ -->
+    <text x="420" y="300" text-anchor="middle" font-size="8" font-family="monospace" fill="#525252" letter-spacing="2" id="label-run" opacity="0">RUNNING</text>
+    <text x="644" y="350" text-anchor="middle" font-size="8" font-family="monospace" fill="#525252" letter-spacing="2" id="label-swim" opacity="0">SWIMMING</text>
+    <text x="920" y="445" text-anchor="middle" font-size="8" font-family="monospace" fill="#525252" letter-spacing="2" id="label-fish" opacity="0">FISHING</text>
+
+  </svg>
+</div>
+
+<div class="scroll-spacer"></div>
+<div class="scroll-hint" id="scrollHint">&#8595; scroll &#8595;</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('mainSvg');
+  const mainPath = document.getElementById('mainPath');
+  const character = document.getElementById('character');
+  const fishingRod = document.getElementById('fishingRod');
+  const fishCatch = document.getElementById('fishCatch');
+  const splash = document.getElementById('splash');
+  const scrollHint = document.getElementById('scrollHint');
+
+  const labelRun = document.getElementById('label-run');
+  const labelSwim = document.getElementById('label-swim');
+  const labelFish = document.getElementById('label-fish');
+
+  const legL = document.getElementById('legL');
+  const legR = document.getElementById('legR');
+  const armL = document.getElementById('armL');
+  const armR = document.getElementById('armR');
+
+  // Get total path length
+  const totalLength = mainPath.getTotalLength();
+
+  // Define journey phases by distance along path (approximate)
+  // We'll calculate actual positions from the path
+
+  // Walking animation frame
+  let lastScrollY = 0;
+  let smoothProgress = 0;
+
+  // Character states
+  const ZONES = {
+    WALK_TO_TRACK: { start: 0, end: 0.20 },
+    RUNNING_TRACK: { start: 0.20, end: 0.45 },
+    WALK_TO_POOL: { start: 0.45, end: 0.55 },
+    DIVING:        { start: 0.55, end: 0.70 },
+    WALK_TO_SEA:   { start: 0.70, end: 0.82 },
+    FISHING:       { start: 0.82, end: 1.0 },
+  };
+
+  function getZone(progress) {
+    for (const [name, range] of Object.entries(ZONES)) {
+      if (progress >= range.start && progress < range.end) return name;
+    }
+    return 'FISHING';
+  }
+
+  // Animate walk cycle
+  function animateWalk(time, speed) {
+    const cycle = Math.sin(time * speed * 15);
+    const legAngle = cycle * 20;
+    const armAngle = -cycle * 15;
+
+    legL.setAttribute('x2', (-3 + Math.sin(legAngle * Math.PI / 180) * 4).toFixed(1));
+    legL.setAttribute('y2', (6 * Math.cos(legAngle * Math.PI / 180 * 0.3)).toFixed(1));
+    legR.setAttribute('x2', (3 - Math.sin(legAngle * Math.PI / 180) * 4).toFixed(1));
+    legR.setAttribute('y2', (6 * Math.cos(legAngle * Math.PI / 180 * 0.3)).toFixed(1));
+
+    armL.setAttribute('x2', (-4 + Math.sin(armAngle * Math.PI / 180) * 3).toFixed(1));
+    armR.setAttribute('x2', (4 - Math.sin(armAngle * Math.PI / 180) * 3).toFixed(1));
+  }
+
+  function animateRun(time) {
+    const cycle = Math.sin(time * 25);
+    const legAngle = cycle * 35;
+
+    legL.setAttribute('x2', (-2 + Math.sin(legAngle * Math.PI / 180) * 6).toFixed(1));
+    legL.setAttribute('y2', (5 * Math.cos(legAngle * Math.PI / 180 * 0.4)).toFixed(1));
+    legR.setAttribute('x2', (2 - Math.sin(legAngle * Math.PI / 180) * 6).toFixed(1));
+    legR.setAttribute('y2', (5 * Math.cos(legAngle * Math.PI / 180 * 0.4)).toFixed(1));
+
+    armL.setAttribute('x2', (-5 + Math.sin(-legAngle * Math.PI / 180) * 4).toFixed(1));
+    armL.setAttribute('y2', (-3).toFixed(1));
+    armR.setAttribute('x2', (5 - Math.sin(-legAngle * Math.PI / 180) * 4).toFixed(1));
+    armR.setAttribute('y2', (-3).toFixed(1));
+  }
+
+  function resetPose() {
+    legL.setAttribute('x2', '-3');
+    legL.setAttribute('y2', '6');
+    legR.setAttribute('x2', '3');
+    legR.setAttribute('y2', '6');
+    armL.setAttribute('x2', '-4');
+    armL.setAttribute('y2', '-2');
+    armR.setAttribute('x2', '4');
+    armR.setAttribute('y2', '-2');
+  }
+
+  // Sitting pose for fishing
+  function sittingPose() {
+    legL.setAttribute('x2', '-4');
+    legL.setAttribute('y2', '4');
+    legR.setAttribute('x2', '4');
+    legR.setAttribute('y2', '4');
+    armL.setAttribute('x2', '-3');
+    armL.setAttribute('y2', '-4');
+    armR.setAttribute('x2', '5');
+    armR.setAttribute('y2', '-5');
+  }
+
+  // Main path drawing (reveal line as character progresses)
+  const pathSegments = mainPath.getTotalLength();
+  mainPath.style.strokeDasharray = pathSegments;
+  mainPath.style.strokeDashoffset = pathSegments;
+
+  let time = 0;
+  let prevTimestamp = 0;
+  let diveSplashTime = 0;
+  let fishCatchTime = 0;
+  let fishCaught = false;
+
+  function update(timestamp) {
+    const dt = prevTimestamp ? (timestamp - prevTimestamp) / 1000 : 0.016;
+    prevTimestamp = timestamp;
+    time += dt;
+
+    // Scroll progress (0 to 1)
+    const scrollMax = document.body.scrollHeight - window.innerHeight;
+    const rawProgress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+
+    // Smooth interpolation
+    smoothProgress += (rawProgress - smoothProgress) * 0.08;
+
+    // Hide scroll hint after initial scroll
+    if (smoothProgress > 0.02) {
+      scrollHint.style.opacity = '0';
+    } else {
+      scrollHint.style.opacity = '1';
+    }
+
+    // Reveal path
+    const revealAmount = smoothProgress * 1.1; // slightly ahead of character
+    mainPath.style.strokeDashoffset = pathSegments * (1 - Math.min(1, revealAmount));
+    mainPath.style.opacity = 0.5 + smoothProgress * 0.3;
+
+    // Character position on path
+    const charDist = smoothProgress * totalLength;
+    const point = mainPath.getPointAtLength(Math.min(charDist, totalLength - 1));
+
+    // Get tangent for rotation
+    const point2 = mainPath.getPointAtLength(Math.min(charDist + 2, totalLength - 1));
+    const angle = Math.atan2(point2.y - point.y, point2.x - point.x) * 180 / Math.PI;
+
+    const zone = getZone(smoothProgress);
+
+    // Character transform
+    let charTransform = `translate(${point.x}, ${point.y})`;
+
+    // Zone-specific behavior
+    switch (zone) {
+      case 'WALK_TO_TRACK':
+      case 'WALK_TO_POOL':
+      case 'WALK_TO_SEA':
+        animateWalk(time, 1.0);
+        labelRun.setAttribute('opacity', zone === 'WALK_TO_TRACK' && smoothProgress > 0.15 ? '0.6' : '0');
+        break;
+
+      case 'RUNNING_TRACK':
+        animateRun(time);
+        labelRun.setAttribute('opacity', '0.8');
+        break;
+
+      case 'DIVING': {
+        const diveLocal = (smoothProgress - ZONES.DIVING.start) / (ZONES.DIVING.end - ZONES.DIVING.start);
+        labelSwim.setAttribute('opacity', '0.8');
+
+        if (diveLocal < 0.2) {
+          // Walking to diving board
+          animateWalk(time, 1.0);
+        } else if (diveLocal < 0.35) {
+          // On the diving board — standing
+          resetPose();
+        } else if (diveLocal < 0.5) {
+          // Diving! Arc motion
+          const diveT = (diveLocal - 0.35) / 0.15;
+          const diveX = 644 + diveT * 5;
+          const diveY = 360 - Math.sin(diveT * Math.PI) * 30 + diveT * 14;
+          const diveRot = diveT * 180;
+          charTransform = `translate(${diveX}, ${diveY}) rotate(${diveRot})`;
+          resetPose();
+          diveSplashTime = time;
+        } else if (diveLocal < 0.55) {
+          // Splash!
+          const splashT = (diveLocal - 0.5) / 0.05;
+          splash.setAttribute('opacity', (1 - splashT) * 0.8);
+          splash.querySelector('circle:first-child').setAttribute('r', 3 + splashT * 8);
+          splash.querySelector('circle:last-child').setAttribute('r', 6 + splashT * 12);
+
+          // Character underwater
+          charTransform = `translate(644, ${374 + (diveLocal - 0.5) * 200})`;
+          character.setAttribute('opacity', 1 - splashT * 0.5);
+        } else {
+          // Swimming across pool
+          const swimT = (diveLocal - 0.55) / 0.45;
+          const swimX = 620 + swimT * 48;
+          const swimY = 400;
+          charTransform = `translate(${swimX}, ${swimY})`;
+          character.setAttribute('opacity', 0.6);
+          splash.setAttribute('opacity', '0');
+
+          // Swimming motion
+          const swimCycle = Math.sin(time * 8);
+          armL.setAttribute('x2', (-4 + swimCycle * 5).toFixed(1));
+          armL.setAttribute('y2', (-4 + Math.abs(swimCycle) * 2).toFixed(1));
+          armR.setAttribute('x2', (4 - swimCycle * 5).toFixed(1));
+          armR.setAttribute('y2', (-4 + Math.abs(swimCycle) * 2).toFixed(1));
+          legL.setAttribute('x2', (-2 + swimCycle * 3).toFixed(1));
+          legL.setAttribute('y2', '5');
+          legR.setAttribute('x2', (2 - swimCycle * 3).toFixed(1));
+          legR.setAttribute('y2', '5');
+        }
+        break;
+      }
+
+      case 'FISHING': {
+        const fishLocal = (smoothProgress - ZONES.FISHING.start) / (ZONES.FISHING.end - ZONES.FISHING.start);
+        character.setAttribute('opacity', '1');
+        labelFish.setAttribute('opacity', '0.8');
+
+        if (fishLocal < 0.2) {
+          animateWalk(time, 0.8);
+        } else {
+          // Sitting and fishing
+          sittingPose();
+          fishingRod.setAttribute('opacity', '0.8');
+
+          if (fishLocal > 0.6 && !fishCaught) {
+            fishCaught = true;
+            fishCatchTime = time;
+          }
+
+          if (fishCaught) {
+            const catchT = Math.min(1, (time - fishCatchTime) * 0.8);
+            // Fish rising on the line
+            const fishY = 485 - catchT * 60;
+            fishCatch.setAttribute('opacity', String(Math.min(1, catchT * 2)));
+            fishCatch.setAttribute('transform', `translate(972, ${fishY}) scale(${0.8 + catchT * 0.5})`);
+
+            // Rod bends
+            const bendAmt = Math.sin(time * 3) * 2 * (1 - catchT);
+            const fishLine = document.getElementById('fishingLine');
+            fishLine.setAttribute('d', `M 990 395 C ${990 + bendAmt} 420, ${985 + bendAmt} 450, 980 ${470 - catchT * 40} C 978 ${478 - catchT * 40}, 975 ${482 - catchT * 40}, 972 ${fishY}`);
+          }
+        }
+        break;
+      }
+    }
+
+    // Reset labels that aren't active
+    if (zone !== 'RUNNING_TRACK' && zone !== 'WALK_TO_TRACK') labelRun.setAttribute('opacity', '0');
+    if (zone !== 'DIVING') {
+      labelSwim.setAttribute('opacity', '0');
+      splash.setAttribute('opacity', '0');
+      character.setAttribute('opacity', '1');
+    }
+    if (zone !== 'FISHING') {
+      labelFish.setAttribute('opacity', '0');
+      fishingRod.setAttribute('opacity', '0');
+      fishCatch.setAttribute('opacity', '0');
+      fishCaught = false;
+    }
+
+    character.setAttribute('transform', charTransform);
+
+    // Camera follow — pan SVG viewBox to follow character
+    const vbW = 500;
+    const vbH = 280;
+    const targetX = point.x - vbW * 0.35;
+    const targetY = point.y - vbH * 0.6;
+
+    // Clamp
+    const vbX = Math.max(-50, Math.min(targetX, 700));
+    const vbY = Math.max(200, Math.min(targetY, 350));
+
+    svg.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
+
+    requestAnimationFrame(update);
+  }
+
+  requestAnimationFrame(update);
+})();
+</script>
+</body>
+</html>
