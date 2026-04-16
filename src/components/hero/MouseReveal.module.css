@@ -1,0 +1,118 @@
+/* MouseReveal — cursor carves holes in a dark canvas to reveal the photo.
+   Rubbing a "bulb zone" charges the overlay; once charged enough, it locks
+   into fully revealed. */
+
+.wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate; /* confine mix-blend-mode to this stacking context */
+  overflow: hidden;
+  pointer-events: none; /* let the parent .hero receive events */
+}
+
+/* Layer 0: background image — always at photo's own brightness.
+   The darkness comes from the canvas overlay, not from a filter.
+   No background-color → transparent outside the image bounds, so any
+   layer placed behind the wrapper (e.g. StaticNebula) shows through. */
+.image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: var(--bg-size, cover);
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(var(--bg-brightness, 1));
+}
+
+/* Layer 0: background video */
+.video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(var(--bg-brightness, 1));
+}
+
+/* Layer 1: canvas darkness overlay.
+   The render loop paints fade-back darkness + destination-out erases
+   at the cursor, producing a trail reveal. When charge locks, the
+   overlay opacity is animated to 0 (photo stays fully visible). */
+.canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transition: opacity 60ms linear;
+}
+
+/* Layer 2: warm soft glow at cursor (additive screen blend) */
+.glow {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 220, 150, var(--glow-intensity, 0.15)) 0%,
+    rgba(255, 200, 120, calc(var(--glow-intensity, 0.15) * 0.5)) 30%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  filter: blur(6px);
+  top: var(--my, -200px);
+  left: var(--mx, -200px);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.glow.active {
+  opacity: 1;
+}
+
+/* Layer 3: bright dot — the "light source" */
+.dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    #ffffff 0%,
+    rgba(255, 220, 150, 0.9) 40%,
+    transparent 70%
+  );
+  box-shadow: 0 0 16px 4px rgba(255, 220, 150, 0.6);
+  top: var(--my, -200px);
+  left: var(--mx, -200px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dot.active {
+  opacity: 1;
+}
+
+/* Hide native cursor on parent .hero when this component is active */
+:global([data-mouse-reveal-cursor="hidden"]),
+:global([data-mouse-reveal-cursor="hidden"] *) {
+  cursor: none;
+}
+
+/* Mobile: disable glow for perf + touch UX (cursor isn't visible anyway) */
+@media (max-width: 768px) {
+  .glow,
+  .dot {
+    display: none;
+  }
+}

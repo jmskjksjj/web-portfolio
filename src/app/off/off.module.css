@@ -25,17 +25,18 @@
   box-sizing: border-box;
 }
 
-/* Top-left label */
+/* Top-right label (mirrored from /on's top-left placement) */
 .heroLabel {
   position: absolute;
   top: 40px;
-  left: clamp(32px, 6vw, 80px);
+  right: clamp(32px, 6vw, 80px);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
   font-weight: 400;
   display: flex;
+  flex-direction: row-reverse; /* mirror: text on left, dash on right */
   align-items: center;
   gap: 16px;
   font-family: var(--font-geist-mono), 'Courier New', monospace;
@@ -63,28 +64,40 @@
   color: var(--text-primary);
   position: relative;
   white-space: nowrap;
-  /* -0.335em moves the container left by half of O's glyph width (~0.67em),
-     so exactly 50% of the O is visible — independent of viewport size. */
-  transform: translateX(-0.335em);
+  /* Mirror of /on: text is flush-right, then shifted right by half of O's
+     glyph width (~0.67em) so exactly 50% of the O bleeds off the right edge,
+     independent of viewport size. */
+  text-align: right;
+  width: 100%;
+  transform: translateX(0.335em);
   z-index: 2;
 }
 
-/* O keeps full size; ff is rendered at half the O's height (0.5em of parent) */
-.letterO {
-  display: inline-block;
-}
-
+/* ff is rendered at half the O's height; O keeps full size.
+   The margin on O (pushing it rightward) creates the gap between ff and O,
+   which in turn pulls ff leftward (due to text-align: right on titleOff) so
+   that ff's left edge lines up with the "H" of Hours below. Mirror of /on.
+   letter-spacing overrides the inherited -0.06em to give the two f's a
+   slight visible gap instead of being pressed together. */
 .lettersFf {
   display: inline-block;
   font-size: 0.5em;
   vertical-align: baseline;
-  margin-left: -0.02em;
+  letter-spacing: 0.01em;
+}
+
+.letterO {
+  display: inline-block;
+  /* Value is in letterO's own em (= titleOff's font-size). Derived so ff-left
+     matches Hours-left (Hours is right-anchored). Accounts for the
+     letter-spacing override on lettersFf which widens the "ff" block. */
+  margin-left: 0.02em;
 }
 
 .titleHours {
   position: absolute;
   bottom: 80px;
-  left: clamp(32px, 6vw, 80px);
+  right: clamp(32px, 6vw, 80px);
   font-size: clamp(72px, 9vw, 140px);
   font-weight: 200;
   letter-spacing: -0.03em;
@@ -94,12 +107,12 @@
   z-index: 3;
 }
 
-/* Bottom-right meta block — sits above the footer line */
+/* Bottom-left meta block — sits above the footer line (mirror of /on) */
 .heroMeta {
   position: absolute;
   bottom: 80px;
-  right: clamp(32px, 6vw, 80px);
-  text-align: right;
+  left: clamp(32px, 6vw, 80px);
+  text-align: left;
   z-index: 3;
 }
 
@@ -121,13 +134,14 @@
   white-space: nowrap;
 }
 
-/* Bottom footer — scroll indicator */
+/* Bottom footer — scroll indicator (mirrored: arrow on left, label on right) */
 .heroFooter {
   position: absolute;
   bottom: 40px;
   left: 0;
   right: 0;
   display: flex;
+  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
   padding: 0 clamp(32px, 6vw, 80px);
@@ -155,6 +169,54 @@
 @keyframes pulse {
   0%, 100% { opacity: 0.3; transform: translateY(0); }
   50% { opacity: 0.7; transform: translateY(4px); }
+}
+
+/* ── Spotlight mode (MouseReveal overlay) ── */
+/* When the hero has the MouseReveal dark bg + spotlight, text must be light
+   regardless of dark/light theme. */
+.heroSpotlight .titleOff {
+  color: #ffffff;
+}
+
+/* The "O" glyph is the visual source of the particle stream — make it
+   luminous so it reads as the origin. Blur radii are in em so they scale
+   with the clamp()-driven font-size. No hover boost: the O keeps its
+   steady glow; cursor-local brightening only applies to the faint
+   background labels/dashes (see FlowingNebula.module.css). */
+.heroSpotlight .letterO {
+  text-shadow:
+    0 0 0.06em rgba(255, 255, 255, 0.55),
+    0 0 0.18em rgba(255, 255, 255, 0.3),
+    0 0 0.4em rgba(255, 255, 255, 0.15),
+    0 0 0.8em rgba(255, 255, 255, 0.08);
+}
+
+.heroSpotlight .heroLabel {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.heroSpotlight .heroLabel::before {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.heroSpotlight .titleHours {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.3);
+}
+
+.heroSpotlight .heroMetaLabel {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.heroSpotlight .heroMetaText {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.heroSpotlight .heroFooter {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.heroSpotlight .heroFooterLine {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ── Section marker ── */

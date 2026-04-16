@@ -1,6 +1,8 @@
 "use client";
 
 import { useLang } from "@/components/LangProvider";
+import { MouseReveal } from "@/components/hero/MouseReveal";
+import { FlowingNebula } from "@/components/hero/FlowingNebula";
 import styles from "./off.module.css";
 
 const hobbies = [
@@ -43,14 +45,32 @@ export default function OffPage() {
       <div className={styles.grain} />
 
       {/* Hero */}
-      <section className={styles.hero}>
+      <section className={`${styles.hero} ${styles.heroSpotlight}`}>
+        {/* Flowing particle stream — disk on right, particles drift leftward */}
+        <FlowingNebula direction="rtl" />
+
+        {/* Inverted mouse reveal: the stream is visible by default; the cursor
+            casts shadow that darkens the scene toward black as the user rubs.
+            Idle → shadow fades and the stars come back. Charge to lockThreshold
+            snaps into a smooth fade-in to fully opaque darkness. */}
+        <MouseReveal
+          invert={true}
+          radius={120}
+          showDot={false}
+          showGlow={false}
+          enableCharge={true}
+          chargeGain={0.0003}
+          chargeDecay={0.013}
+          lockFadeSpeed={0.005}
+        />
+
         <div className={styles.heroLabel}>
           {isKo ? "일 외의 시간" : "What I do when I'm not building"}
         </div>
 
         <div className={styles.titleWrap}>
           <div className={styles.titleOff}>
-            <span className={styles.letterO}>O</span><span className={styles.lettersFf}>ff</span>
+            <span className={styles.lettersFf}>ff</span><span className={styles.letterO}>O</span>
           </div>
         </div>
 
@@ -58,7 +78,7 @@ export default function OffPage() {
 
         <div className={styles.heroMeta}>
           <div className={styles.heroMetaLabel}>
-            — N°10 / {isKo ? "취미" : "Interests"}
+            N°10 / {isKo ? "취미" : "Interests"} —
           </div>
           <p className={styles.heroMetaText}>
             {isKo

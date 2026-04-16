@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mouse Spotlight Prototype — Off Hero</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --text-primary: #e5e5e5;
+    --text-muted: #525252;
+    --border: #1e1e1e;
+  }
+
+  body.light {
+    --bg: #fafafa;
+    --text-primary: #171717;
+    --text-muted: #a3a3a3;
+    --border: #e8e8e8;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: none; /* hide native cursor — replaced by glow below (toggleable) */
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  body.show-cursor { cursor: auto; }
+
+  /* Grain */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Nav mock */
+  .nav-mock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    z-index: 100;
+  }
+
+  .nav-mock span { color: var(--text-primary); }
+
+  /* ── Hero ── */
+  .hero {
+    margin-top: 56px;
+    height: calc(100vh - 56px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: clamp(155px, 19vh, 245px);
+    box-sizing: border-box;
+    background: #000; /* fallback if video fails */
+  }
+
+  /* LAYER 0 — Background video */
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(var(--video-brightness, 1));
+  }
+
+  /* LAYER 1 — Spotlight mask (radial gradient × multiply blend) */
+  /* Center = white → unchanged; Edges = dark → darken */
+  .hero-spotlight {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    background: radial-gradient(
+      circle var(--radius, 220px) at var(--mx, 50%) var(--my, 50%),
+      #ffffff 0%,
+      #ffffff calc(var(--inner, 15) * 1%),
+      var(--dark-stop, #222) calc(var(--outer, 75) * 1%),
+      var(--dark-edge, #050505) 100%
+    );
+  }
+
+  /* LAYER 2 — Soft warm glow at cursor tip (screen blend, extra sparkle) */
+  .hero-glow {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle,
+      rgba(255, 220, 150, var(--glow-intensity, 0.35)) 0%,
+      rgba(255, 200, 120, calc(var(--glow-intensity, 0.35) * 0.5)) 30%,
+      transparent 70%);
+    mix-blend-mode: screen;
+    filter: blur(6px);
+    top: var(--my, -200px);
+    left: var(--mx, -200px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .hero-glow.active { opacity: 1; }
+
+  /* LAYER 3 — Small bright dot = the "light source" itself */
+  .hero-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #fff 0%, rgba(255,220,150,0.9) 40%, transparent 70%);
+    box-shadow: 0 0 16px 4px rgba(255, 220, 150, 0.6);
+    top: var(--my, -200px);
+    left: var(--mx, -200px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .hero-dot.active { opacity: 1; }
+
+  body.hide-glow .hero-glow,
+  body.hide-glow .hero-dot { display: none; }
+
+  /* LAYER 4+ — Hero text (always visible, above spotlight) */
+  .title-wrap {
+    position: relative;
+    width: 100%;
+    line-height: 0.82;
+    z-index: 4;
+  }
+
+  .title-off {
+    font-size: clamp(280px, 42vw, 640px);
+    font-weight: 200;
+    letter-spacing: -0.06em;
+    color: var(--text-primary);
+    position: relative;
+    white-space: nowrap;
+    transform: translateX(-0.335em);
+    mix-blend-mode: difference; /* makes text visible against any bg */
+  }
+
+  .letter-o { display: inline-block; }
+  .letters-ff {
+    display: inline-block;
+    font-size: 0.5em;
+    vertical-align: baseline;
+    margin-left: -0.02em;
+  }
+
+  .title-hours {
+    position: absolute;
+    bottom: 80px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: clamp(72px, 9vw, 140px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+    line-height: 1;
+    z-index: 5;
+  }
+
+  .hero-label {
+    position: absolute;
+    top: 40px;
+    left: clamp(32px, 6vw, 80px);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Courier New', monospace;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  .hero-meta {
+    position: absolute;
+    bottom: 80px;
+    right: clamp(32px, 6vw, 80px);
+    text-align: right;
+    z-index: 5;
+  }
+
+  .hero-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Courier New', monospace;
+    margin-bottom: 10px;
+  }
+
+  .hero-meta-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-footer {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 clamp(32px, 6vw, 80px);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+
+  .hero-footer-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 20px;
+  }
+
+  .hero-arrow {
+    font-size: 14px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: translateY(0); }
+    50% { opacity: 0.7; transform: translateY(4px); }
+  }
+
+  /* Dev panel */
+  .dev-panel {
+    position: fixed;
+    top: 72px;
+    right: 16px;
+    background: rgba(20, 20, 20, 0.9);
+    color: #e5e5e5;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    z-index: 500;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    min-width: 260px;
+    backdrop-filter: blur(8px);
+  }
+
+  .dev-panel h3 {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  .dev-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .dev-row label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  .dev-row input[type=range] {
+    width: 100%;
+    height: 4px;
+    accent-color: #ffd66a;
+  }
+
+  .dev-btn {
+    background: transparent;
+    border: 1px solid currentColor;
+    color: inherit;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 6px;
+    width: 100%;
+    transition: background 0.2s;
+  }
+
+  .dev-btn:hover {
+    background: rgba(255, 214, 106, 0.15);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .title-off { font-size: clamp(200px, 60vw, 400px); }
+    .title-hours { font-size: clamp(48px, 14vw, 80px); bottom: 72px; }
+    .hero-meta { bottom: 72px; max-width: 240px; }
+    .hero-meta-text { white-space: normal; font-size: 12px; }
+    .dev-panel { top: 64px; right: 8px; min-width: 200px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-mock">
+  <span>SeonJ</span> &nbsp;—&nbsp; on &nbsp;—&nbsp; off &nbsp;&nbsp;&nbsp; (move mouse — spotlight follows)
+</div>
+
+<section class="hero" id="hero">
+  <!-- Layer 0: BG video -->
+  <video class="hero-video" id="video" autoplay loop muted playsinline>
+    <source src="/prototype-flower-bg.mp4" type="video/mp4">
+  </video>
+
+  <!-- Layer 1: Spotlight dark overlay (multiply blend) -->
+  <div class="hero-spotlight" id="spotlight"></div>
+
+  <!-- Layer 2: Soft warm glow at cursor (screen blend) -->
+  <div class="hero-glow" id="glow"></div>
+
+  <!-- Layer 3: Bright dot = the "light source" -->
+  <div class="hero-dot" id="dot"></div>
+
+  <!-- Layer 4+: Hero text (always visible) -->
+  <div class="hero-label">N°10 &nbsp; WHAT I DO WHEN I'M NOT BUILDING</div>
+
+  <div class="title-wrap">
+    <div class="title-off">
+      <span class="letter-o">O</span><span class="letters-ff">ff</span>
+    </div>
+  </div>
+
+  <div class="title-hours">Hours</div>
+
+  <div class="hero-meta">
+    <div class="hero-meta-label">— N°10 / Interests</div>
+    <p class="hero-meta-text">Try everything I want to try</p>
+  </div>
+
+  <div class="hero-footer">
+    <span>SCROLL TO EXPLORE</span>
+    <div class="hero-footer-line"></div>
+    <span class="hero-arrow">↓</span>
+  </div>
+</section>
+
+<!-- Dev panel -->
+<div class="dev-panel">
+  <h3>Spotlight Tuning</h3>
+  <div class="dev-row">
+    <label>Radius <span id="val-radius">220</span>px</label>
+    <input type="range" id="ctrl-radius" min="80" max="600" step="10" value="220">
+  </div>
+  <div class="dev-row">
+    <label>Inner soft edge <span id="val-inner">15</span>%</label>
+    <input type="range" id="ctrl-inner" min="0" max="60" step="1" value="15">
+  </div>
+  <div class="dev-row">
+    <label>Outer soft edge <span id="val-outer">75</span>%</label>
+    <input type="range" id="ctrl-outer" min="40" max="100" step="1" value="75">
+  </div>
+  <div class="dev-row">
+    <label>Darkness mid <span id="val-darkmid">#222</span></label>
+    <input type="range" id="ctrl-darkmid" min="0" max="120" step="2" value="34">
+  </div>
+  <div class="dev-row">
+    <label>Darkness edge <span id="val-darkedge">#050505</span></label>
+    <input type="range" id="ctrl-darkedge" min="0" max="60" step="2" value="5">
+  </div>
+  <div class="dev-row">
+    <label>Follow speed <span id="val-speed">0.18</span></label>
+    <input type="range" id="ctrl-speed" min="0.05" max="1" step="0.02" value="0.18">
+  </div>
+  <div class="dev-row">
+    <label>Video brightness <span id="val-vbright">1.0</span></label>
+    <input type="range" id="ctrl-vbright" min="0.3" max="1.5" step="0.05" value="1.0">
+  </div>
+  <div class="dev-row">
+    <label>Glow intensity <span id="val-glow">0.35</span></label>
+    <input type="range" id="ctrl-glow" min="0" max="1" step="0.05" value="0.35">
+  </div>
+  <button class="dev-btn" id="btn-hide-glow">Toggle Cursor Glow</button>
+  <button class="dev-btn" id="btn-cursor">Toggle Native Cursor</button>
+  <button class="dev-btn" id="btn-theme">Toggle Theme</button>
+</div>
+
+<script>
+(() => {
+  const hero = document.getElementById('hero');
+  const spotlight = document.getElementById('spotlight');
+  const glow = document.getElementById('glow');
+  const dot = document.getElementById('dot');
+  const video = document.getElementById('video');
+
+  // Current & target positions for smooth follow
+  let target = { x: 0, y: 0, active: false };
+  let current = { x: window.innerWidth / 2, y: (window.innerHeight - 56) / 2 };
+  let followSpeed = 0.18;
+
+  const handlePointer = (clientX, clientY) => {
+    const rect = hero.getBoundingClientRect();
+    target.x = clientX - rect.left;
+    target.y = clientY - rect.top;
+    target.active = (
+      target.x >= 0 && target.y >= 0 &&
+      target.x <= rect.width && target.y <= rect.height
+    );
+  };
+
+  window.addEventListener('mousemove', (e) => handlePointer(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      const t = e.touches[0];
+      handlePointer(t.clientX, t.clientY);
+    }
+  }, { passive: true });
+  window.addEventListener('mouseleave', () => { target.active = false; });
+
+  const animate = () => {
+    current.x += (target.x - current.x) * followSpeed;
+    current.y += (target.y - current.y) * followSpeed;
+
+    spotlight.style.setProperty('--mx', current.x + 'px');
+    spotlight.style.setProperty('--my', current.y + 'px');
+    glow.style.setProperty('--mx', current.x + 'px');
+    glow.style.setProperty('--my', current.y + 'px');
+    dot.style.setProperty('--mx', current.x + 'px');
+    dot.style.setProperty('--my', current.y + 'px');
+
+    if (target.active) {
+      glow.classList.add('active');
+      dot.classList.add('active');
+    } else {
+      glow.classList.remove('active');
+      dot.classList.remove('active');
+    }
+
+    requestAnimationFrame(animate);
+  };
+  animate();
+
+  // ── Dev panel wiring ──
+  const bindRange = (id, valId, onChange, format) => {
+    const inp = document.getElementById(id);
+    const out = document.getElementById(valId);
+    inp.addEventListener('input', () => {
+      const v = parseFloat(inp.value);
+      out.textContent = format ? format(v) : v;
+      onChange(v);
+    });
+  };
+
+  bindRange('ctrl-radius', 'val-radius', (v) => {
+    spotlight.style.setProperty('--radius', v + 'px');
+  });
+
+  bindRange('ctrl-inner', 'val-inner', (v) => {
+    spotlight.style.setProperty('--inner', v);
+  });
+
+  bindRange('ctrl-outer', 'val-outer', (v) => {
+    spotlight.style.setProperty('--outer', v);
+  });
+
+  bindRange('ctrl-darkmid', 'val-darkmid', (v) => {
+    const hex = '#' + Math.round(v).toString(16).padStart(2, '0').repeat(3);
+    spotlight.style.setProperty('--dark-stop', hex);
+    document.getElementById('val-darkmid').textContent = hex;
+  });
+
+  bindRange('ctrl-darkedge', 'val-darkedge', (v) => {
+    const hex = '#' + Math.round(v).toString(16).padStart(2, '0').repeat(3);
+    spotlight.style.setProperty('--dark-edge', hex);
+    document.getElementById('val-darkedge').textContent = hex;
+  });
+
+  bindRange('ctrl-speed', 'val-speed', (v) => { followSpeed = v; },
+    (v) => v.toFixed(2));
+
+  bindRange('ctrl-vbright', 'val-vbright', (v) => {
+    video.style.setProperty('--video-brightness', v);
+  }, (v) => v.toFixed(2));
+
+  bindRange('ctrl-glow', 'val-glow', (v) => {
+    glow.style.setProperty('--glow-intensity', v);
+  }, (v) => v.toFixed(2));
+
+  document.getElementById('btn-hide-glow').addEventListener('click', () => {
+    document.body.classList.toggle('hide-glow');
+  });
+
+  document.getElementById('btn-cursor').addEventListener('click', () => {
+    document.body.classList.toggle('show-cursor');
+  });
+
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+  });
+})();
+</script>
+
+</body>
+</html>

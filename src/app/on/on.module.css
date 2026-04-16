@@ -74,7 +74,10 @@
   display: inline-block;
   font-size: 0.5em;
   vertical-align: baseline;
-  margin-left: -0.02em;
+  /* Gap between O and n. Tuned so n's right edge lines up with the "s" of
+     Hours below (Hours is left-anchored). Value is in letterN's own em
+     (= 0.5em of titleOn's font). */
+  margin-left: 0.19em;
 }
 
 .titleHours {
@@ -151,6 +154,54 @@
 @keyframes pulse {
   0%, 100% { opacity: 0.3; transform: translateY(0); }
   50% { opacity: 0.7; transform: translateY(4px); }
+}
+
+/* ── Spotlight mode (MouseReveal overlay) ── */
+/* When the hero has the MouseReveal dark bg + spotlight, text must be light
+   regardless of dark/light theme. */
+.heroSpotlight .titleOn {
+  color: #ffffff;
+}
+
+/* The "O" glyph is the visual source of the particle stream — make it
+   luminous so it reads as the origin. Blur radii are in em so they scale
+   with the clamp()-driven font-size. No hover boost: the O keeps its
+   steady glow; cursor-local brightening only applies to the faint
+   background labels/dashes (see FlowingNebula.module.css). */
+.heroSpotlight .letterO {
+  text-shadow:
+    0 0 0.06em rgba(255, 255, 255, 0.55),
+    0 0 0.18em rgba(255, 255, 255, 0.3),
+    0 0 0.4em rgba(255, 255, 255, 0.15),
+    0 0 0.8em rgba(255, 255, 255, 0.08);
+}
+
+.heroSpotlight .heroLabel {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.heroSpotlight .heroLabel::before {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.heroSpotlight .titleHours {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.3);
+}
+
+.heroSpotlight .heroMetaLabel {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.heroSpotlight .heroMetaText {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.heroSpotlight .heroFooter {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.heroSpotlight .heroFooterLine {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ── Mobile ── */

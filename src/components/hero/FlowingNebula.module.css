@@ -1,0 +1,76 @@
+/* FlowingNebula — horizontal particle stream emanating from a 2D O-ring. */
+
+.wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Annotation layer — faint scattered dashes + labels.
+   Base alphas are set to the "boosted" value; the mask below multiplies them
+   down everywhere except a ~220px radius around the cursor. Net effect:
+   labels/dashes stay at their previous faint baseline across the viewport,
+   but brighten to their full colour only where the cursor is. No global
+   :hover flash. --nx/--ny are set by FlowingNebula.tsx on mouse move. */
+.annotations {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  --spot-mask: radial-gradient(
+    circle 220px at var(--nx, -9999px) var(--ny, -9999px),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 20%,
+    rgba(0, 0, 0, 0.24) 100%
+  );
+  mask-image: var(--spot-mask);
+  -webkit-mask-image: var(--spot-mask);
+}
+
+.label {
+  position: absolute;
+  font-family: var(--font-geist-mono), "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  /* 0.12 (old base) / 0.24 (mask edge) = 0.5 boosted. Far from cursor:
+     0.5 × 0.24 ≈ 0.12 (matches old base). Near cursor: 0.5 × 1.0 = 0.5. */
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.label.bright {
+  /* 0.22 / 0.24 ≈ 0.92. Far: ~0.22, Near: 0.92. */
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.label.dim {
+  /* 0.07 / 0.24 ≈ 0.29. Far: ~0.07, Near: 0.29. */
+  color: rgba(255, 255, 255, 0.29);
+}
+
+/* Long faint horizontal dash — hints at flow direction as a thin filament. */
+.dash {
+  position: absolute;
+  height: 1px;
+  /* 0.12 / 0.24 = 0.5 boosted. Far: 0.12, Near: 0.5. */
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%);
+}
+
+.dash.faint {
+  /* 0.08 / 0.24 ≈ 0.33. Far: 0.08, Near: 0.33. */
+  background: rgba(255, 255, 255, 0.33);
+}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useLang } from "@/components/LangProvider";
+import { MouseReveal } from "@/components/hero/MouseReveal";
+import { FlowingNebula } from "@/components/hero/FlowingNebula";
 import styles from "./on.module.css";
 
 const awards = [
@@ -53,7 +55,19 @@ export default function AboutPage() {
       <div className={styles.grain} />
 
       {/* Hero */}
-      <section className={styles.hero}>
+      <section className={`${styles.hero} ${styles.heroSpotlight}`}>
+        {/* Flowing particle stream — disk on left, particles drift rightward */}
+        <FlowingNebula direction="ltr" />
+
+        {/* Mouse-tracked spotlight: rubbing the darkness reveals the stream */}
+        <MouseReveal
+          radius={120}
+          showDot={false}
+          enableCharge={true}
+          chargeGain={0.0003}
+          chargeDecay={0.013}
+        />
+
         <div className={styles.heroLabel}>
           {isKo ? "내가 작업하는 시간" : "What I build when I'm on"}
         </div>
