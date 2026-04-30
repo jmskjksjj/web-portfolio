@@ -6,6 +6,7 @@ import {
   projects,
   getProjectBySlug,
   categoryLabels,
+  extractYoutubeId,
 } from "@/lib/projects";
 import { T } from "@/components/TranslatedText";
 import { ProjectType, ProjectDescription, ProjectDetailText } from "@/components/ProjectDetail";
@@ -69,6 +70,36 @@ export default async function ProjectDetailPage({
       <div className="mb-10 md:mb-16">
         {project.category === "mcp" && project.tools && project.tools.length > 0 ? (
           <McpToolsSection tools={project.tools} />
+        ) : project.youtubeUrl ? (
+          <div className="space-y-3">
+            <div className="rounded-lg overflow-hidden border border-border bg-black" style={{ aspectRatio: "16 / 9" }}>
+              {/* Player params:
+                  rel=0 → restrict end-screen recommendations to same channel.
+                  modestbranding=1 → minimize the YouTube logo on the control bar.
+                  iv_load_policy=3 → suppress video annotations/cards.
+                  playsinline=1 → keep iOS playing inline instead of going fullscreen.
+                  Autoplay intentionally NOT enabled — page loads with the
+                  thumbnail + center play button (clean state, no pause-card
+                  clutter). User clicks to start; once playing, controls fade
+                  out on mouse-idle and reappear on hover (YouTube default,
+                  ~2s timeout — not externally adjustable). */}
+              <iframe
+                src={`https://www.youtube.com/embed/${extractYoutubeId(project.youtubeUrl)}?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1`}
+                title={project.name}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+            <a
+              href={project.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-mono text-text-secondary hover:text-text-primary transition-colors"
+            >
+              ▶ Watch on YouTube ↗
+            </a>
+          </div>
         ) : project.video ? (
           <div className="rounded-lg overflow-hidden border border-border bg-black" style={{ aspectRatio: "16 / 9" }}>
             <video

@@ -172,6 +172,18 @@
 }
 
 /* ── Spotlight mode (MouseReveal overlay) ── */
+/* The spotlight hero is a fixed "cinematic dark" scene: the Canvas overlay and
+   FlowingNebula wrappers are transparent, so without an explicit background
+   the body's --bg leaks through. In light theme that body is #fafafa, which
+   would make the white spotlight text, luminous O glow, and white particles
+   all disappear — and /off starts with Canvas transparent (invert mode), so
+   the issue is visible from the first frame. Forcing a dark bg here keeps the
+   hero consistent across themes while everything outside the hero still
+   follows theme tokens. */
+.heroSpotlight {
+  background: #0a0a0a;
+}
+
 /* When the hero has the MouseReveal dark bg + spotlight, text must be light
    regardless of dark/light theme. */
 .heroSpotlight .titleOff {

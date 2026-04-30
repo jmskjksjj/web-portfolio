@@ -5,8 +5,17 @@ import { MouseReveal } from "@/components/hero/MouseReveal";
 import { FlowingNebula } from "@/components/hero/FlowingNebula";
 import styles from "./on.module.css";
 
+// Awards — descending. The 4 month-stamped 2024 entries originated from 99Works
+// projects but are surfaced here under "Awards" because they were prizes /
+// selections (3rd place, winning entry, certified-product selection, partner
+// selection); the 99Works Projects section below holds the non-award sales /
+// contracts / exhibitions (7 entries) so nothing is duplicated across sections.
 const awards = [
   { year: "2025", en: "44th Grand Korea Architecture Exhibition — Exhibition in Noeulseom", ko: "제44회 대한민국건축대전 — '대한민국건축문화제 in 노을섬' 전시", result: { en: "Selected", ko: "입선" } },
+  { year: "2024", en: "Busan Design Center — Busan Brand Shop Partner Selection", ko: "부산디자인진흥원 — 부산브랜드샵 협업기업 선정", result: { en: "Selected", ko: "선정" } },
+  { year: "2024", en: "Hiker Ground × Buulgyeong Pop-up Store Design Collaboration", ko: "하이커그라운드 부울경 공동 팝업스토어 디자인 협업", result: { en: "Winning Entry", ko: "현상 당선" } },
+  { year: "2024", en: "Namhae German Village Souvenir Certified-Product Competition", ko: "2024 남해 독일마을 기념품 인증제 상품 공모", result: { en: "Selected", ko: "선정" } },
+  { year: "2024", en: "Busan Port Singamman Wharf Architectural Facility Design Competition", ko: "부산항 신감만 감만부두 건축시설물 설계공모 디자인 협업", result: { en: "3rd Place", ko: "현상 3위" } },
   { year: "2024", en: "Busan City Brand Goods Design Competition (99Works)", ko: "부산 도시브랜드 굿즈 디자인 공모전 (99Works)", result: { en: "Silver", ko: "은상" } },
   { year: "2023", en: "BUILDNER 'The Home of Shadows' Competition", ko: "BUILDNER 'The Home of Shadows' 국제공모전", result: { en: "Shortlist", ko: "Shortlist" } },
   { year: "2023", en: "27th LH Student Housing Architecture Competition", ko: "제27회 LH 대학생 주택건축대전", result: { en: "Honorable Mention", ko: "장려상" } },
@@ -39,10 +48,38 @@ const experience = [
   },
 ];
 
+// 99Works projects — only the non-award entries; the 4 award/selection
+// items (3rd place, winning entry, two selections) live in the `awards`
+// array above to avoid duplicating the same line in two sections.
+const projects99Works = [
+  { period: "24.11", en: "Yeongdeungpo-gu Anyangcheon Riverside Hub — Planning Collaboration", ko: "영등포구 안양천 수변활력거점 조성 기획 협업", status: { en: "Ongoing", ko: "실시 진행중" } },
+  { period: "24.08", en: "BIADW BUSAN NEXT — Urban Model 3D Printing Contract", ko: "부산국제건축디자인워크숍 BUSAN NEXT 도시모형 3D 프린팅 계약", status: { en: "Exhibited / Pending", ko: "전시 완료 / 대기" } },
+  { period: "24.06", en: "BIADW with MVRDV — Operations", ko: "부산국제건축디자인워크숍 with MVRDV 운영", status: { en: "Operations Closed", ko: "운영완료" } },
+  { period: "24.06", en: "BIADW with MVRDV BUSAN — 3D Printing Contract", ko: "부산국제건축디자인워크숍 with MVRDV BUSAN 3D 프린팅 계약", status: { en: "Exhibited / Pending", ko: "전시 완료 / 대기" } },
+  { period: "24.05", en: "Pohang Lot Development Direction — Design Service", ko: "포항 필지 개발방향성 디자인용역", status: { en: "Ongoing", ko: "실시 진행중" } },
+  { period: "24.03", en: "Bansong Urban Regeneration Hub — Model Production", ko: "반송도시재생 거점시설 모형 제작", status: { en: "Permanent Exhibit", ko: "상시전시" } },
+  { period: "24.03", en: "BIADW Project Steering Committee — Contract", ko: "부산국제건축디자인워크숍 프로젝트 집행위원회 계약", status: { en: "Contract Closed", ko: "계약만료" } },
+];
+
 const speaking = [
   { year: "2024", en: "University 3D Printing Tech Lecture — 4 sessions (1st–4th year students)", ko: "동아대학교 3D 프린팅 기술 강의 — 4회 (1학년–4학년)" },
   { year: "2024", en: "Busan Architecture Festival Newsletter — PEOPLE Interview", ko: "부산건축제 뉴스레터 61호 — PEOPLE 부문 인터뷰" },
   { year: "2024", en: "BIADW 3D Printing Production Guidelines", ko: "부산국제건축디자인워크숍 3D 프린팅 제작수칙" },
+];
+
+const workshops = [
+  {
+    period: "26.04–",
+    en: "Archi-Crew",
+    ko: "Archi-Crew",
+    desc: { en: "Active member", ko: "활동 중" },
+  },
+  {
+    period: "2024",
+    en: "Talgeon Faculty — Architectural Computation Workshop, Cohorts 2 & 3 (Automating Architecture Services)",
+    ko: "탈건학부 건축컴퓨테이션 워크숍 2,3기 — Automating Architecture Services",
+    desc: { en: "Participant", ko: "참여" },
+  },
 ];
 
 export default function AboutPage() {
@@ -82,7 +119,8 @@ export default function AboutPage() {
 
         <div className={styles.heroMeta}>
           <div className={styles.heroMetaLabel}>
-            — N°07 / {isKo ? "수상" : "Award"}
+            — N°{awards.length.toString().padStart(2, "0")} /{" "}
+            {isKo ? "수상" : "Award"}
           </div>
           <p className={styles.heroMetaText}>
             {isKo
@@ -131,7 +169,7 @@ export default function AboutPage() {
             {isKo ? "수상" : "Awards"}
           </h2>
           <span className="font-mono text-[11px] text-text-muted">
-            {isKo ? "총 7회 수상" : "7 total"}
+            {isKo ? `총 ${awards.length}회 수상` : `${awards.length} total`}
           </span>
         </div>
 
@@ -153,10 +191,10 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* D. Experience */}
+      {/* D. Business & Internship */}
       <div className="py-10 md:py-16 border-b border-border">
         <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-6">
-          {isKo ? "경력" : "Experience"}
+          {isKo ? "경력 & 인턴" : "Business & Internship"}
         </h2>
 
         <div className="flex flex-col">
@@ -181,7 +219,36 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* E. Lectures & Interviews */}
+      {/* E. 99Works Projects */}
+      <div className="py-10 md:py-16 border-b border-border">
+        <div className="flex items-baseline justify-between mb-6">
+          <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium">
+            {isKo ? "99Works 프로젝트" : "99Works Projects"}
+          </h2>
+          <span className="font-mono text-[11px] text-text-muted">
+            {isKo ? `총 ${projects99Works.length}건` : `${projects99Works.length} total`}
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          {projects99Works.map((p, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-[60px_1fr_auto] gap-x-3 md:gap-x-4 py-2.5 md:py-3 border-b border-border last:border-b-0 items-baseline"
+            >
+              <span className="font-mono text-[13px] text-text-muted">{p.period}</span>
+              <span className="text-sm text-text-primary font-light">
+                {isKo ? p.ko : p.en}
+              </span>
+              <span className="font-mono text-[12px] text-text-muted">
+                {isKo ? p.status.ko : p.status.en}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* F. Lectures & Interviews */}
       <div className="py-10 md:py-16 border-b border-border">
         <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-6">
           {isKo ? "강의 & 인터뷰" : "Lectures & Interviews"}
@@ -202,7 +269,31 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* F. Background */}
+      {/* G. Workshops */}
+      <div className="py-10 md:py-16 border-b border-border">
+        <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-6">
+          {isKo ? "워크숍" : "Workshops"}
+        </h2>
+
+        <div className="flex flex-col">
+          {workshops.map((w, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-[80px_1fr_auto] gap-x-3 md:gap-x-4 py-2.5 md:py-3 border-b border-border last:border-b-0 items-baseline"
+            >
+              <span className="font-mono text-[13px] text-text-muted">{w.period}</span>
+              <span className="text-sm text-text-primary font-light">
+                {isKo ? w.ko : w.en}
+              </span>
+              <span className="font-mono text-[12px] text-text-muted">
+                {isKo ? w.desc.ko : w.desc.en}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* H. Background */}
       <div className="py-10 md:py-16 border-b border-border">
         <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-6">
           {t("about.background.label")}
@@ -227,7 +318,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* G. Contact */}
+      {/* I. Contact */}
       <div className="pt-10 md:pt-16">
         <h2 className="text-xs md:text-[11px] uppercase tracking-[0.08em] text-text-muted font-medium mb-4">
           {t("about.contact.label")}

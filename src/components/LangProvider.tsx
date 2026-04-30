@@ -95,8 +95,8 @@ const translations: Record<string, Record<Lang, string>> = {
   },
   "about.thesis.label": { en: "What I Build", ko: "무엇을 만드는가" },
   "about.thesis": {
-    en: "In architectural competitions, most of the work — interpreting regulations, analyzing sites, producing drawings — is still done by hand. As an architecture student, I experienced this inefficiency firsthand and started building AI systems to automate the entire workflow. From PDF document analysis to building code compliance to CAD drawing generation, I built a 9-phase pipeline powered by 6 MCP servers and 19 AI tools. Every component in this ecosystem — designed, built, and maintained solo.",
-    ko: "건축 설계공모에서 법규 해석, 대지 분석, 도면 작성까지 대부분의 작업은 여전히 수작업에 의존합니다. 건축학을 전공하며 이 비효율을 직접 경험한 뒤, 전 과정을 자동화하는 AI 시스템을 설계하기 시작했습니다. PDF 문서 분석부터 건축법규 적합성 검토, CAD 도면 생성까지 9단계 파이프라인을 구축했고, 6개 MCP 서버와 19개 AI 도구로 구성된 에코시스템 전체를 혼자 만들고 운영하고 있습니다.",
+    en: "In architectural competitions, most of the work — interpreting regulations, analyzing sites, producing drawings — is still done by hand. As an architecture student, I experienced this inefficiency firsthand and started building AI systems to automate the entire workflow. From PDF document analysis to building code compliance to CAD drawing generation, I built a 9-phase pipeline powered by 6 MCP servers and 49 AI tools. Every component in this ecosystem — designed, built, and maintained solo.",
+    ko: "건축 설계공모에서 법규 해석, 대지 분석, 도면 작성까지 대부분의 작업은 여전히 수작업에 의존합니다. 건축학을 전공하며 이 비효율을 직접 경험한 뒤, 전 과정을 자동화하는 AI 시스템을 설계하기 시작했습니다. PDF 문서 분석부터 건축법규 적합성 검토, CAD 도면 생성까지 9단계 파이프라인을 구축했고, 6개 MCP 서버와 49개 AI 도구로 구성된 에코시스템 전체를 혼자 만들고 운영하고 있습니다.",
   },
   "about.background.label": { en: "Background", ko: "배경" },
   "about.bg.domain": { en: "Domain", ko: "도메인" },
